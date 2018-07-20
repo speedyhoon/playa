@@ -40,6 +40,7 @@ ajaxRequest.send(null);
 
 const repeatAll = 1, repeatOne = 2, repeatOff = 0;
 var song, repeat = repeatAll, repeatUpTo = 0;
+var countUp = false, volZeroPause = false;
 var $playlist = document.querySelector('.playlist');
 var $tracker = document.querySelector('.tracker');
 var $volume = document.querySelector('.volume');
@@ -64,7 +65,11 @@ function initAudio($elem) {
 
     song.addEventListener('timeupdate',function (){
         $tracker.value = (song.currentTime / song.duration * 100)||0;
-        $lapsed.textContent = ~~song.currentTime;
+        if (countUp) {
+            $lapsed.textContent = ~~song.currentTime;
+        }else{
+            $lapsed.textContent = ~~(song.duration - song.currentTime);
+        }
     });
 
     song.addEventListener('ended',function (){
@@ -88,9 +93,32 @@ function pauseAudio(stop) {
     $pause.hidden = true;
 }
 
+$volume.ondblclick = function (e) {
+    volZeroPause = !volZeroPause;
+    if(!volZeroPause && song.volume <= 0 && song.currentTime > 0){
+        song.volume = 0.1;
+        $volume.value = 10;
+        playAudio()
+    }
+};
+
 $play.onclick = function (e) {
     e.preventDefault();
+    if (!$play.hidden && $volume.value <= 0){
+        song.volume = 0.1;
+        $volume.value = 10;
+    }
     playAudio();
+};
+
+$lapsed.onclick = function (e) {
+    // e.preventDefault();
+    countUp = !countUp;
+    if (countUp) {
+        $lapsed.title = "Elapsed"
+    }else{
+        $lapsed.title = "To Go"
+    }
 };
 
 $pause.onclick = function (e) {
@@ -184,13 +212,14 @@ function trackClick($elm){
 }
 
 $volume.oninput = function (event){
-    if (event.target.value/100 <= 0){
-        pauseAudio();
-    }else if (song.paused){
-        playAudio()
+    song.volume = $volume.value/100;
+    if (volZeroPause) {
+        if (song.volume <= 0) {
+            pauseAudio();
+        } else if (song.paused) {
+            playAudio()
+        }
     }
-
-    song.volume = event.target.value/100;
 };
 
 $tracker.oninput = function(event){
