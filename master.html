@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang=en>
+<meta name=viewport content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0'>
+<title>HTML5 Audio player</title>
+<link href=css/styles.css rel=stylesheet>
+
+<div class=player>
+    <!--div class=pl></div-->
+    <div class=title></div>
+    <div class=artist></div>
+    <img class=cover>
+    <div class=controls>
+        <div class=play></div>
+        <div class=pause hidden></div>
+        <div class=rew></div>
+        <div class=fwd></div>
+        <div class=stop></div>
+        <div class='repeat repeatAll'></div>
+    </div>
+
+    <input hidden type=range class=volume name=volume max=100>
+    <input type=range class=tracker name=volume max=100 value=0>
+</div>
+<ul class=playlist></ul>
+<!--table>
+    <thead>
+        <tr>
+            <th>Artist
+            <th>Album
+            <th>Song
+        </tr>
+    <tbody>
+</table-->
+<script src=js/library.js></script>
