@@ -52,6 +52,7 @@ var $play = document.querySelector('.play');
 var $pause = document.querySelector('.pause');
 var $fwd = document.querySelector('.fwd');
 var $rew = document.querySelector('.rew');
+var $lapsed = document.querySelector('.lapsed');
 
 function initAudio($elem) {
     $title.textContent = $elem.textContent;
@@ -63,6 +64,7 @@ function initAudio($elem) {
 
     song.addEventListener('timeupdate',function (){
         $tracker.value = (song.currentTime / song.duration * 100)||0;
+        $lapsed.textContent = ~~song.currentTime;
     });
 
     song.addEventListener('ended',function (){
@@ -154,13 +156,16 @@ $repeat.onclick = function (e) {
     switch(repeat){
         case repeatAll:
             $repeat.className = 'repeat repeatAll';
+            $repeat.title = 'Repeat One';
             return;
         case repeatOne:
             $repeat.className = "repeat";
+            $repeat.title = 'Repeat Off';
             return;
         default:
             repeat = repeatOff;
             $repeat.className = "repeat pause";
+            $repeat.title = 'Repeat All';
     }
 };
 

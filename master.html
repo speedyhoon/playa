@@ -5,21 +5,21 @@
 <link href=css/styles.css rel=stylesheet>
 
 <div class=player>
-    <!--div class=pl></div-->
     <div class=title></div>
     <div class=artist></div>
     <img class=cover>
     <div class=controls>
-        <div class=play></div>
-        <div class=pause hidden></div>
-        <div class=rew></div>
-        <div class=fwd></div>
-        <div class=stop></div>
-        <div class='repeat repeatAll'></div>
+        <div class=play title=Play></div>
+        <div class=pause title=Pause hidden></div>
+        <div class=rew title=Rewind></div>
+        <div class=fwd title='Next Track'></div>
+        <div class=stop title=Stop></div>
+        <div class='repeat repeatAll' title=Repeat></div>
     </div>
 
-    <input hidden type=range class=volume name=volume max=100>
+    <input type=range class=volume name=volume max=100>
     <input type=range class=tracker name=volume max=100 value=0>
+    <div class=lapsed>0</div>
 </div>
 <ul class=playlist></ul>
 <!--table>
