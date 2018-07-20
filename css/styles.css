@@ -165,4 +165,5 @@ body {
     width: 50px;
     font-family: monospace;
     text-align: right;
+    cursor: pointer;
 }
