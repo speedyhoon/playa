@@ -58,6 +58,33 @@ var $fwd = document.querySelector('.fwd');
 var $rew = document.querySelector('.rew');
 var $lapsed = document.querySelector('.lapsed');
 
+
+
+var lGain = audioCtx.createGain();
+var mGain = audioCtx.createGain();
+var hGain = audioCtx.createGain();
+// var gainDb = -1.0;
+var gainDb = 0;
+var bandSplit = [360,3600];
+var hBand = audioCtx.createBiquadFilter();
+hBand.type = "lowshelf";
+hBand.frequency.value = bandSplit[0];
+hBand.gain.value = gainDb;
+
+var hInvert = audioCtx.createGain();
+// hInvert.gain.value = -1.0;
+hInvert.gain.value = 0;
+
+var mBand = audioCtx.createGain();
+
+var lBand = audioCtx.createBiquadFilter();
+lBand.type = "highshelf";
+lBand.frequency.value = bandSplit[1];
+lBand.gain.value = gainDb;
+
+var lInvert = audioCtx.createGain();
+lInvert.gain.value = 0;
+
 function initAudio($elem) {
     $title.textContent = $elem.textContent;
     $artist.textContent = $elem.getAttribute('artist');
@@ -83,8 +110,55 @@ function initAudio($elem) {
     removeClass(document.querySelector('.playlist .active'), 'active');
     addClass($elem, 'active');
 
-    audioCtx.createMediaElementSource(song).connect(panNde);
+    var sourceNode = audioCtx.createMediaElementSource(song);
+
+    // var context = new AudioContext();
+    // var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // var mediaElement = document.getElementById('player');
+    // var sourceNode = audioCtx.createMediaElementSource(mediaElement);
+    // var sourceNode = audioCtx.createMediaElementSource(song);
+
+    // EQ Properties
+    //
+
+
+    sourceNode.connect(lBand);
+    sourceNode.connect(mBand);
+    sourceNode.connect(hBand);
+
+    hBand.connect(hInvert);
+    lBand.connect(lInvert);
+
+    hInvert.connect(mBand);
+    lInvert.connect(mBand);
+
+
+    lBand.connect(lGain);
+    mBand.connect(mGain);
+    hBand.connect(hGain);
+
+    var sum = audioCtx.createGain();
+    sourceNode.connect(panNde);
+    lGain.connect(sum);
+    mGain.connect(sum);
+    hGain.connect(sum);
+
+    // sum.connect(panNde)
+    // sum.connect(audioCtx.destination);
+
     panNde.connect(audioCtx.destination);
+    sum.connect(panNde);
+}
+
+function changeGain(string,type) {
+    var value = parseFloat(string) / 100.0;
+
+    switch(type)
+    {
+        case 'lowGain': lGain.gain.value = value; break;
+        case 'midGain': mGain.gain.value = value; break;
+        case 'highGain': hGain.gain.value = value; break;
+    }
 }
 
 function showTime(seconds){
