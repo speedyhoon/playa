@@ -1,6 +1,5 @@
 Shuffle
 drag & drop tracks for reordering
-Balance left/right
 save drag & drop tracks reordering
 Equaliser
 Equaliser reset button
