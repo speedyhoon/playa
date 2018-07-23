@@ -70,9 +70,9 @@ function initAudio($elem) {
     song.addEventListener('timeupdate',function (){
         $tracker.value = (song.currentTime / song.duration * 100)||0;
         if (countUp) {
-            $lapsed.textContent = ~~song.currentTime;
+            showTime(song.currentTime);
         }else{
-            $lapsed.textContent = ~~(song.duration - song.currentTime);
+            showTime(song.duration - song.currentTime);
         }
     });
 
@@ -86,6 +86,16 @@ function initAudio($elem) {
     audioCtx.createMediaElementSource(song).connect(panNde);
     panNde.connect(audioCtx.destination);
 }
+
+function showTime(seconds){
+    seconds = ~~seconds;
+    $lapsed.textContent = ~~(seconds/60) +':'+ pad(seconds%60);
+}
+
+function pad(num) {
+    return num >= 10 ? num : '0'+num;
+}
+
 function playAudio() {
     song.play();
     $play.hidden = true;
