@@ -2,8 +2,7 @@ var ajaxRequest = new XMLHttpRequest();
 
 //executes when an ajax response is received
 ajaxRequest.onreadystatechange = function(){
-    if(ajaxRequest.readyState === 4){
-        // var response = ajaxRequest.responseText;
+    if(ajaxRequest.readyState === 4 && ajaxRequest.status === 200) {
         var lib = JSON.parse(ajaxRequest.responseText);
         var list = document.querySelector(".playlist");
         // var list = document.querySelector("tbody");
@@ -66,6 +65,7 @@ function initAudio($elem) {
 
     song = new Audio($elem.getAttribute('audiourl'));
     song.volume = $volume.value/100;
+    //song.preload = "auto"; //chrome sets this by default
 
     song.addEventListener('timeupdate',function (){
         $tracker.value = (song.currentTime / song.duration * 100)||0;
@@ -97,7 +97,13 @@ function pad(num) {
 }
 
 function playAudio() {
-    song.play();
+    var promise = song.play();
+    if (promise !== undefined) {
+        promise.catch(function() {
+            //playback failed, so skip to the next track
+            $fwd.click();
+        });
+    }
     $play.hidden = true;
     $pause.hidden = false;
 }
@@ -155,13 +161,6 @@ function forward(hasEnded){
         if (repeat === repeatOff){
             return
         }
-
-        //continue playing this track
-        if (repeat === repeatOne) {
-            song.currentTime = 0;
-            playAudio();
-            return
-        }
     }
 
     var $next = document.querySelector('.playlist .active').nextElementSibling;
@@ -198,6 +197,7 @@ $stop.onclick = function (e) {
 $repeat.onclick = function (e) {
     e.preventDefault();
     repeat++;
+    song.loop = repeat === repeatOne;
     switch(repeat){
         case repeatAll:
             $repeat.className = 'repeat repeatAll';
