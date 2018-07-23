@@ -40,6 +40,10 @@ ajaxRequest.send(null);
 
 const repeatAll = 1, repeatOne = 2, repeatOff = 0;
 var song, repeat = repeatAll, repeatUpTo = 0;
+
+var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+var panNde = audioCtx.createStereoPanner();
+
 var countUp = false, volZeroPause = false;
 var $playlist = document.querySelector('.playlist');
 var $tracker = document.querySelector('.tracker');
@@ -78,6 +82,9 @@ function initAudio($elem) {
 
     removeClass(document.querySelector('.playlist .active'), 'active');
     addClass($elem, 'active');
+
+    audioCtx.createMediaElementSource(song).connect(panNde);
+    panNde.connect(audioCtx.destination);
 }
 function playAudio() {
     song.play();
@@ -236,3 +243,11 @@ function addClass($elm, clss){
         $elm.classList.add(clss);
     }
 }
+
+//left/right panning
+var $panCtrl = document.querySelector('.panCtrl');
+var $panVal = document.querySelector('.panVal');
+$panCtrl.oninput = function() {
+    panNde.pan.value = $panCtrl.value;
+    $panVal.innerHTML = $panCtrl.value;
+};
