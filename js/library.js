@@ -4,21 +4,21 @@ var ajaxRequest = new XMLHttpRequest();
 
 //executes when an ajax response is received
 ajaxRequest.onreadystatechange = function(){
-    if(ajaxRequest.readyState === 4 && ajaxRequest.status === 200) {
-        var lib = JSON.parse(ajaxRequest.responseText);
-        var list = document.querySelector("tbody");
-        for(var i =0; i< lib.length; i++){
+	if(ajaxRequest.readyState === 4 && ajaxRequest.status === 200) {
+		var lib = JSON.parse(ajaxRequest.responseText);
+		var list = document.querySelector("tbody");
+		for(var i =0; i< lib.length; i++){
 
-            var tbody = document.createElement('tbody');
-            tbody.innerHTML = `<tr><td>${lib[i].Artist}<td>${lib[i].Album}<td>${lib[i].Title}`;
-            var tr = tbody.children[0];
-            tr.onclick = function(event){
-                trackClick(event.target.parentElement);
-            };
-            list.appendChild(tr);
-        }
-        initAudio(document.querySelector('tbody tr:first-child'));
-    }
+			var tbody = document.createElement('tbody');
+			tbody.innerHTML = `<tr><td>${lib[i].Artist}<td>${lib[i].Album}<td>${lib[i].Title}`;
+			var tr = tbody.children[0];
+			tr.onclick = function(event){
+				trackClick(event.target.parentElement);
+			};
+			list.appendChild(tr);
+		}
+		initAudio(document.querySelector('tbody tr:first-child'));
+	}
 };
 
 ajaxRequest.open("GET", "library2", true);
@@ -104,14 +104,14 @@ mGain.gain.value = parseFloat(document.querySelector('.mid').value);
 hGain.gain.value = parseFloat(document.querySelector('.high').value);
 
 function changeGain(string,type) {
-    var value = parseFloat(string);
+	var value = parseFloat(string);
 
-    switch(type)
-    {
-        case 'lowGain': lGain.gain.value = value; break;
-        case 'midGain': mGain.gain.value = value; break;
-        case 'highGain': hGain.gain.value = value; break;
-    }
+	switch(type)
+	{
+		case 'lowGain': lGain.gain.value = value; break;
+		case 'midGain': mGain.gain.value = value; break;
+		case 'highGain': hGain.gain.value = value; break;
+	}
 }
 
 //User Interface
@@ -190,85 +190,85 @@ $stop.onclick = function () {
 };
 
 $lapsed.onclick = function () {
-    countUp = !countUp;
-    if(countUp) {
-        $lapsed.title = "Elapsed"
-    }else{
-        $lapsed.title = "To Go"
-    }
+	countUp = !countUp;
+	if(countUp) {
+		$lapsed.title = "Elapsed"
+	}else{
+		$lapsed.title = "To Go"
+	}
 };
 
 $nxt.onclick = function () {
-    forward();
+	forward();
 };
 function forward(hasEnded){
-    pauseAudio();
+	pauseAudio();
 
-    if(hasEnded) {
-        if(repeat === repeatOff){
-            return
-        }
-    }
+	if(hasEnded) {
+		if(repeat === repeatOff){
+			return
+		}
+	}
 
-    var $next = document.querySelector('tbody .'+active).nextElementSibling;
-    if(!$next) {
-        $next = document.querySelector('tbody :first-child');
-    }
+	var $next = document.querySelector('tbody .'+active).nextElementSibling;
+	if(!$next) {
+		$next = document.querySelector('tbody :first-child');
+	}
 
-    initAudio($next);
-    playAudio();
+	initAudio($next);
+	playAudio();
 }
 
 $rwd.onclick = function () {
-    //threshold to go to previous track
-    if($tracker.value >= 5){
-        song.currentTime = 0;
-        return
-    }
-    pauseAudio();
+	//threshold to go to previous track
+	if($tracker.value >= 5){
+		song.currentTime = 0;
+		return
+	}
+	pauseAudio();
 
-    var $prev = document.querySelector('tbody .'+active).previousElementSibling;
-    if(!$prev) {
-        $prev = document.querySelector('tbody :last-child');
-    }
+	var $prev = document.querySelector('tbody .'+active).previousElementSibling;
+	if(!$prev) {
+		$prev = document.querySelector('tbody :last-child');
+	}
 
-    initAudio($prev);
-    playAudio();
+	initAudio($prev);
+	playAudio();
 };
 
 $repeat.onclick = function () {
-    repeat++;
-    song.loop = repeat === repeatOne;
-    switch(repeat){
-        case repeatAll:
-            $repeat.className = 'repeat repeatAll';
-            $repeat.title = 'Repeat One';
-            return;
-        case repeatOne:
-            $repeat.className = "repeat";
-            $repeat.title = 'Repeat Off';
-            return;
-        default:
-            repeat = repeatOff;
-            $repeat.className = "repeat pause";
-            $repeat.title = 'Repeat All';
-    }
+	repeat++;
+	song.loop = repeat === repeatOne;
+	switch(repeat){
+		case repeatAll:
+			$repeat.className = 'repeat repeatAll';
+			$repeat.title = 'Repeat One';
+			return;
+		case repeatOne:
+			$repeat.className = "repeat";
+			$repeat.title = 'Repeat Off';
+			return;
+		default:
+			repeat = repeatOff;
+			$repeat.className = "repeat pause";
+			$repeat.title = 'Repeat All';
+	}
 };
 
 $prv.onclick = function (e) {
-    //threshold to go to previous track
+	//threshold to go to previous track
 	if($tracker.value >= 5){
 		song.currentTime = 0;
 		return
 	}
 
-    var $prev = document.querySelector('tbody .'+active).previousElementSibling;
-    if(!$prev) {
-        $prev = document.querySelector('tbody tr:last-child');
-    }
+	var $prev = document.querySelector('tbody .'+active).previousElementSibling;
+	if(!$prev) {
+		$prev = document.querySelector('tbody tr:last-child');
+	}
 
-    initAudio($prev);
-    playAudio()
+	initAudio($prev);
+	playAudio()
 };
 
 // show playlist
@@ -279,36 +279,36 @@ $cover.onclick = function () {
 
 // playlist elements - click
 function trackClick($elm){
-    initAudio($elm);
-    playAudio();
+	initAudio($elm);
+	playAudio();
 }
 
 $tracker.oninput = function(event){
-    song.currentTime = song.duration / event.target.max * event.target.value;
+	song.currentTime = song.duration / event.target.max * event.target.value;
 };
 
 function removeClass($elm, clss){
-    if($elm){
-        $elm.classList.remove(clss);
-    }
+	if($elm){
+		$elm.classList.remove(clss);
+	}
 }
 function addClass($elm, clss){
-    if($elm){
-        $elm.classList.add(clss);
-    }
+	if($elm){
+		$elm.classList.add(clss);
+	}
 }
 
 //left/right panning
 var $panCtrl = document.querySelector('.panCtrl');
 var $panVal = document.querySelector('.panVal');
 $panCtrl.oninput = function() {
-    panNde.pan.value = $panCtrl.value;
-    $panVal.innerHTML = $panCtrl.value;
+	panNde.pan.value = $panCtrl.value;
+	$panVal.innerHTML = $panCtrl.value;
 };
 $panCtrl.ondblclick = function() {
-    panNde.pan.value = 0;
-    $panVal.innerHTML = 0;
-    $panCtrl.value = 0;
+	panNde.pan.value = 0;
+	$panVal.innerHTML = 0;
+	$panCtrl.value = 0;
 };
 
 var muteVol;
