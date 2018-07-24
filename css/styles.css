@@ -1,5 +1,5 @@
 body {
-    background-color: #aaa;
+	background-color: #aaa;
 	color: #fff;
 	font-family: sans-serif;
 	margin: 0;
@@ -8,9 +8,10 @@ body {
 	background: linear-gradient(to bottom, #555 0%,#444 100%);
 	border: 1px solid #000;
 	border-radius: 5px;
-    margin: auto;
+	margin: auto;
 	padding: .5em;
-    position: relative;
+	position: relative;
+	user-select: none;
 	width: 500px;
 }
 .active{
@@ -20,152 +21,152 @@ tbody tr{
 	cursor: pointer;
 }
 /*.title, .artist {
-    font-family: verdana;
-    left: 167px;
-    position: absolute;
+	 font-family: verdana;
+	 left: 167px;
+	 position: absolute;
 
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
+	 -moz-user-select: none;
+	 -webkit-user-select: none;
+	 -ms-user-select: none;
 }
 .title {
-    color: #FFFFFF;
-    font-size: 14px;
-    font-weight: bold;
-    top: 23px;
+	color: #FFFFFF;
+	font-size: 14px;
+	font-weight: bold;
+	top: 23px;
 }
 .artist {
-    color: #EEEEEE;
-    font-size: 12px;
-    top: 40px;
+	color: #EEEEEE;
+	font-size: 12px;
+	top: 40px;
 }
 .pl:hover {
-    top: 21px;
+	top: 21px;
 }
 .cover {
-    border-radius: 5px;
-    cursor: pointer;
-    height: 94px;
-    left: 20px;
-    position: absolute;
-    top: 20px;
-    width: 94px;
+	border-radius: 5px;
+	cursor: pointer;
+	height: 94px;
+	left: 20px;
+	position: absolute;
+	top: 20px;
+	width: 94px;
 }
 .controls {
-    cursor: pointer;
-    height: 23px;
-    left: 167px;
-    position: absolute;
-    top: 65px;
-    width: 138px;
+	cursor: pointer;
+	height: 23px;
+	left: 167px;
+	position: absolute;
+	top: 65px;
+	width: 138px;
 }
 .controls .stop, .controls .repeat {
-    background: transparent url("../png/spr2.png") no-repeat scroll 0 0;
-    float: left;
-    height: 100%;
-    width: 33%;
+	background: transparent url("../png/spr2.png") no-repeat scroll 0 0;
+	float: left;
+	height: 100%;
+	width: 33%;
 }
 .controls .stop {
-    background-position: -53px -198px;
+	background-position: -53px -198px;
 }
 .controls .repeat {
-    background-position: -100px -198px;
+	background-position: -100px -198px;
 }
 .controls .repeatAll {
-    background-position: -146px -198px;
+	background-position: -146px -198px;
 }
 
 .controls .play, .controls .pause, .controls .rew, .controls .fwd {
-    background: transparent url("../png/spr.png") no-repeat scroll 0 0;
-    float: left;
-    height: 100%;
-    width: 33%;
+	background: transparent url("../png/spr.png") no-repeat scroll 0 0;
+	float: left;
+	height: 100%;
+	width: 33%;
 }
 .controls .play {
-    background-position: -8px -171px;
+	background-position: -8px -171px;
 }
 .controls .pause {
-    background-position: -8px -198px;
+	background-position: -8px -198px;
 }
 .controls .rew {
-    background-position: -54px -171px;
+	background-position: -54px -171px;
 }
 .controls .fwd {
-    background-position: -100px -171px;
+	background-position: -100px -171px;
 }
 .controls .play:hover {
-    background-position: -8px -170px;
+	background-position: -8px -170px;
 }
 .controls .pause:hover {
-    background-position: -8px -197px;
+	background-position: -8px -197px;
 }
 .controls .rew:hover {
-    background-position: -54px -170px;
+	background-position: -54px -170px;
 }
 .controls .fwd:hover {
-    background-position: -100px -170px;
+	background-position: -100px -170px;
 }
 
 .volume {
-    height: 11px;
-    left: 186px;
-    position: absolute;
-    top: 118px;
-    width: 112px;
+	height: 11px;
+	left: 186px;
+	position: absolute;
+	top: 118px;
+	width: 112px;
 }
 .tracker {
-    height: 15px;
-    left: 20px;
-    position: absolute;
-    bottom: 8px;
-    width: 247px;
+	height: 15px;
+	left: 20px;
+	position: absolute;
+	bottom: 8px;
+	width: 247px;
 }
 .ui-slider-range {
-    background: transparent url("../png/spr.png") no-repeat scroll 5px -222px;
-    height: 100%;
-    position: absolute;
-    top: 0;
+	background: transparent url("../png/spr.png") no-repeat scroll 5px -222px;
+	height: 100%;
+	position: absolute;
+	top: 0;
 }
 .ui-slider-handle {
-    cursor: pointer;
-    height: 10px;
-    margin-left: -5px;
-    position: absolute;
-    top: 2px;
-    width: 10px;
-    z-index: 2;
+	cursor: pointer;
+	height: 10px;
+	margin-left: -5px;
+	position: absolute;
+	top: 2px;
+	width: 10px;
+	z-index: 2;
 }
 .volume .ui-slider-handle {
-    background: url("../png/spr.png") no-repeat scroll -201px -188px rgba(0, 0, 0, 0);
-    height: 13px;
-    width: 13px;
+	background: url("../png/spr.png") no-repeat scroll -201px -188px rgba(0, 0, 0, 0);
+	height: 13px;
+	width: 13px;
 }
 .playlist {
-    background: #333;
-    border-radius: 5px;
-    list-style-type: none;
-    margin: auto;
-    padding-bottom: 10px;
-    padding-top: 15px;
-    position: relative;
-    width: 326px;
-    z-index: 1;
+	background: #333;
+	border-radius: 5px;
+	list-style-type: none;
+	margin: auto;
+	padding-bottom: 10px;
+	padding-top: 15px;
+	position: relative;
+	width: 326px;
+	z-index: 1;
 }
 .playlist li {
-    color: #eee;
-    cursor: pointer;
-    margin: 0 0 5px 15px;
+	color: #eee;
+	cursor: pointer;
+	margin: 0 0 5px 15px;
 }
 .playlist li.active {
-    font-weight: bold;
+	font-weight: bold;
 }
 .lapsed {
-    position: absolute;
-    bottom: 8px;
-    right: 6px;
-    color: lime;
-    width: 50px;
-    font-family: monospace;
-    text-align: right;
-    cursor: pointer;
+	position: absolute;
+	bottom: 8px;
+	right: 6px;
+	color: lime;
+	width: 50px;
+	font-family: monospace;
+	text-align: right;
+	cursor: pointer;
 }*/
