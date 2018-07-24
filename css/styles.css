@@ -4,6 +4,9 @@ body {
 	font-family: sans-serif;
 	margin: 0;
 }
+.active{
+	color: orange;
+}
 .player, table {
 	background: linear-gradient(to bottom, #555 0%,#444 100%);
 	border: 1px solid #000;
@@ -12,13 +15,43 @@ body {
 	padding: .5em;
 	position: relative;
 	user-select: none;
+}
+.player{
 	width: 500px;
+	background: url(/png/record.png) no-repeat 61px 13px, linear-gradient(to bottom, #555 0%,#444 100%);
 }
-.active{
-	color: orange;
-}
-tbody tr{
+tbody tr,.cover{
 	cursor: pointer;
+}
+.play,.pause,.stop,.nxt,.prv,.rwd,.repeat{
+	background: linear-gradient(to bottom, #666 0%,#444 100%);
+	width: 40px;
+	border: 1px solid #000;
+	text-align: center;
+	display: inline-block;
+}
+.play,.pause{
+	border-radius: 5px 0 0 5px;
+}
+.repeat{
+	border-radius: 0 5px 5px 0;
+}
+.title {
+	position: absolute;
+	left: 160px;
+}
+.artist {
+	position: absolute;
+	left: 160px;
+	top: 30px;
+}
+.lapsed {
+	color: lime;
+	font-family: monospace;
+	cursor: pointer;
+}
+[hidden] {
+	display: none;
 }
 /*.title, .artist {
 	 font-family: verdana;
