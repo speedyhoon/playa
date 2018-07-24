@@ -176,12 +176,9 @@ $play.onclick = function(){
 };
 function play() {
 	song.play()
-	.then(function(){
-		//console.log("Yay! Video is playing!");
-	})
-	.catch(function(error) {
-		//An error ocurred or the user agent prevented playback
-		console.log("Error: " + error);
+	.catch(function(err) {
+		//An error occurred or the user agent prevented playback
+		console.warn(err, song && song.src);
 	});
 
 	$play.hidden = true;
