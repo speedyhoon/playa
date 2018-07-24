@@ -18,6 +18,7 @@ ajaxRequest.onreadystatechange = function(){
 			list.appendChild(tr);
 		}
 		initAudio(document.querySelector('tbody tr:first-child'));
+		play();
 	}
 };
 
@@ -44,12 +45,11 @@ song.addEventListener('timeupdate',function(){
 });
 
 song.addEventListener('ended',function(){
-	forward(true);
+	next(true);
 });
 
 function showTime(seconds){
-	seconds = ~~seconds;
-	$lapsed.textContent = ~~(seconds/60) +':'+ pad(seconds%60);
+	$lapsed.textContent = ~~(seconds/60) +':'+ pad(~~seconds%60);
 }
 
 function pad(num) {
@@ -112,8 +112,8 @@ lGain.gain.value = parseFloat(document.querySelector('.low').value);
 mGain.gain.value = parseFloat(document.querySelector('.mid').value);
 hGain.gain.value = parseFloat(document.querySelector('.high').value);
 
-function changeGain(string,type) {
-	var value = parseFloat(string);
+function changeGain(value,type) {
+	value = parseFloat(value);
 
 	switch(type){
 		case 'lowGain': lGain.gain.value = value; break;
@@ -123,7 +123,7 @@ function changeGain(string,type) {
 }
 
 //User Interface
-var countUp = false, volZeroPause = false;
+var countUp = true, volZeroPause = false;
 var $tracker = document.querySelector('.tracker');
 var $volume = document.querySelector('.volume');
 var $title = document.querySelector('.title');
@@ -166,9 +166,9 @@ $play.onclick = function(){
 	if(!$play.hidden && $volume.value <= 0){
 		volume(.1);
 	}
-	playAudio();
+	play();
 };
-function playAudio() {
+function play() {
 	song.play()
 	.then(function(){
 		//console.log("Yay! Video is playing!");
@@ -183,16 +183,16 @@ function playAudio() {
 }
 
 $pause.onclick = function(){
-	pauseAudio();
+	pause();
 };
-function pauseAudio() {
+function pause() {
 	song.pause();
 	$play.hidden = false;
 	$pause.hidden = true;
 }
 
 $stop.onclick = function(){
-	pauseAudio();
+	pause();
 	song.currentTime = 0;
 };
 
@@ -201,16 +201,14 @@ $lapsed.onclick = function(){
 	if(countUp) {
 		$lapsed.title = "Elapsed"
 	}else{
-		$lapsed.title = "To Go"
+		$lapsed.title = "Remaining"
 	}
 };
 
 $nxt.onclick = function(){
-	forward();
+	next();
 };
-function forward(hasEnded){
-	pauseAudio();
-
+function next(hasEnded){
 	if(hasEnded) {
 		if(repeat === repeatOff){
 			return
@@ -223,7 +221,7 @@ function forward(hasEnded){
 	}
 
 	initAudio($next);
-	playAudio();
+	play();
 }
 
 $rwd.onclick = function(){
@@ -237,7 +235,7 @@ $prv.onclick = function(){
 	}
 
 	initAudio($prev);
-	playAudio();
+	play();
 };
 
 $repeat.onclick = function(){
@@ -268,7 +266,7 @@ $cover.onclick = function(){
 // playlist elements - click
 function trackClick($elm){
 	initAudio($elm);
-	playAudio();
+	play();
 }
 
 $tracker.oninput = function(event){
@@ -312,7 +310,7 @@ $volume.ondblclick = function(){
 	volZeroPause = !volZeroPause;
 	if(!volZeroPause && song.volume <= 0 && song.currentTime > 0){
 		volume(.1);
-		playAudio();
+		play();
 	}
 };
 
@@ -320,9 +318,9 @@ $volume.oninput = function(){
 	song.volume = $volume.value;
 	if(volZeroPause) {
 		if(song.volume <= 0) {
-			pauseAudio();
+			pause();
 		} else if(song.paused) {
-			playAudio();
+			play();
 		}
 	}
 };
