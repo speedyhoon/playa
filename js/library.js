@@ -57,6 +57,7 @@ function pad(num) {
 }
 
 //Equaliser properties
+const resetEq = .5;
 var audioCtx = new AudioContext();
 var gainDb = -40.0;
 var bandSplit = [360,3600];
@@ -108,17 +109,22 @@ sum.connect(panNde);
 
 panNde.connect(audioCtx.destination);
 
-lGain.gain.value = parseFloat(document.querySelector('.low').value);
-mGain.gain.value = parseFloat(document.querySelector('.mid').value);
-hGain.gain.value = parseFloat(document.querySelector('.high').value);
+var $low = document.getElementById('low');
+var $mid = document.getElementById('mid');
+var $high = document.getElementById('high');
 
-function changeGain(value,type) {
-	value = parseFloat(value);
+lGain.gain.value = parseFloat($low.value);
+mGain.gain.value = parseFloat($mid.value);
+hGain.gain.value = parseFloat($high.value);
 
-	switch(type){
-		case 'l': lGain.gain.value = value; break;
-		case 'm': mGain.gain.value = value; break;
-		case 'h': hGain.gain.value = value; break;
+function changeGain($elem) {
+	$elem = $elem.target ? $elem.target : $elem;
+	var value = parseFloat($elem.value);
+
+	switch($elem.id){
+		case 'low': lGain.gain.value = value; break;
+		case 'mid': mGain.gain.value = value; break;
+		case 'high': hGain.gain.value = value; break;
 	}
 }
 
@@ -328,3 +334,26 @@ function volume(value){
 	song.volume = value;
 	$volume.value = value;
 }
+
+function reset(event){
+	event.target.value = resetEq;
+	changeGain(event.target);
+}
+
+document.getElementById('resetEq').onclick = function(){
+	$low.value = resetEq;
+	$mid.value = resetEq;
+	$high.value = resetEq;
+	changeGain($low);
+	changeGain($mid);
+	changeGain($high);
+};
+
+$low.oninput = changeGain;
+$low.ondblclick = reset;
+
+$mid.oninput = changeGain;
+$mid.ondblclick = reset;
+
+$high.oninput = changeGain;
+$high.ondblclick = reset;
