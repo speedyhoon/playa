@@ -4,17 +4,17 @@
 <title>HTML5 Audio player</title>
 <link href=css/styles.css rel=stylesheet>
 <div class=player>
-    <div hidden class=title></div>
-    <div hidden class=artist></div>
+    <div class=title></div>
+    <div class=artist></div>
 	<img class=cover width=95 height=95 title='Toggle Playlist'>
-	<div class=play title=Play>Play</div>
-	<div class=pause title=Pause hidden>Pause</div>
-	<div class=stop title=Stop>Stop</div>
-	<div class=nxt title='Next Track'>Next</div>
-	<div class=rwd title=Rewind>Rewind</div>
-	<div class=prv title='Previous Track'>Previous</div>
-    <div class='repeat repeatAll' title=Repeat>Repeat</div>
-
+	<div class=play title=Play>&vrtri;</div>
+	<div class=pause title=Pause hidden>||</div>
+	<div class=stop title=Stop>&lhblk;</div>
+	<div class=rwd title=Rewind hidden>&vltri;</div>
+	<div class=prv title='Previous Track'>&LeftTriangleBar;</div>
+	<div class=nxt title='Next Track'>&RightTriangleBar;</div>
+    <div class='repeat repeatAll' title=Repeat>R</div>
+	<br>
 	Volume <input type=range class=volume min=0 step=.01 max=1 value=.5> <span class=mute title=Mute>Mute</span>
     <br>
 	<input type=range class=tracker max=100 value=0> <span class=lapsed title=Elapsed>0</span>
