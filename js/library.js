@@ -1,3 +1,4 @@
+const active = 'active';
 var ajaxRequest = new XMLHttpRequest();
 
 //executes when an ajax response is received
@@ -86,7 +87,7 @@ function initAudio($elem) {
 
     song.addEventListener('timeupdate',function (){
         $tracker.value = (song.currentTime / song.duration * 100)||0;
-        if (countUp) {
+        if(countUp) {
             showTime(song.currentTime);
         }else{
             showTime(song.duration - song.currentTime);
@@ -97,8 +98,8 @@ function initAudio($elem) {
         forward('ended');
     });
 
-    removeClass(document.querySelector('tbody .active'), 'active');
-    addClass($elem, 'active');
+    removeClass(document.querySelector('tbody .active'), active);
+    addClass($elem, active);
 }
 
     var sourceNode = audioCtx.createMediaElementSource(song);
@@ -156,45 +157,26 @@ function pad(num) {
 }
 
 function playAudio() {
-    var promise = song.play();
-    if (promise !== undefined) {
-        promise.catch(function() {
-            //playback failed, so skip to the next track
-            $nxt.click();
-        });
-    }
-    $play.hidden = true;
-    $pause.hidden = false;
+	var promise = song.play();
+	if(promise !== undefined) {
+			promise.catch(function() {
+			//playback failed, so skip to the next track
+			//$nxt.click();
+			debugger;
+			return
+		});
+	}
+	$play.hidden = true;
+	$pause.hidden = false;
 }
-function pauseAudio(stop) {
+function pauseAudio() {
     song.pause();
     $play.hidden = false;
     $pause.hidden = true;
 }
 
-$volume.ondblclick = function () {
-    volZeroPause = !volZeroPause;
-    if(!volZeroPause && song.volume <= 0 && song.currentTime > 0){
-        song.volume = 0.1;
-        $volume.value = 10;
-        playAudio()
-    }
-};
-
-var muteVol;
-$mute.onclick = function() {
-    if($mute.classList.contains('active')) {
-        song.volume = muteVol;
-        removeClass($mute, 'active');
-    }else{
-        muteVol = song.volume;
-        song.volume = 0;
-        addClass($mute, 'active');
-    }
-};
-
 $play.onclick = function () {
-    if (!$play.hidden && $volume.value <= 0){
+    if(!$play.hidden && $volume.value <= 0){
         song.volume = 0.1;
         $volume.value = 10;
     }
@@ -203,7 +185,7 @@ $play.onclick = function () {
 
 $lapsed.onclick = function () {
     countUp = !countUp;
-    if (countUp) {
+    if(countUp) {
         $lapsed.title = "Elapsed"
     }else{
         $lapsed.title = "To Go"
@@ -221,14 +203,14 @@ $nxt.onclick = function () {
 function forward(hasEnded){
     pauseAudio();
 
-    if (hasEnded) {
-        if (repeat === repeatOff){
+    if(hasEnded) {
+        if(repeat === repeatOff){
             return
         }
     }
 
     var $next = document.querySelector('tbody .active').nextElementSibling;
-    if (!$next) {
+    if(!$next) {
         $next = document.querySelector('tbody :first-child');
     }
 
@@ -238,14 +220,14 @@ function forward(hasEnded){
 
 $rwd.onclick = function () {
     //threshold to go to previous track
-    if ($tracker.value >= 5){
+    if($tracker.value >= 5){
         song.currentTime = 0;
         return
     }
     pauseAudio();
 
     var $prev = document.querySelector('tbody .active').previousElementSibling;
-    if (!$prev) {
+    if(!$prev) {
         $prev = document.querySelector('tbody :last-child');
     }
 
@@ -277,7 +259,7 @@ $repeat.onclick = function () {
 
 $prv.onclick = function (e) {
     //threshold to go to previous track
-    // if ($tracker.value >= 5){
+    // if($tracker.value >= 5){
     //  song.currentTime = 0;
     //  return
     // }
@@ -285,7 +267,7 @@ $prv.onclick = function (e) {
     // mediaElement.pause();
 
     var $prev = document.querySelector('tbody tr.active').previousElementSibling;
-    if (!$prev) {
+    if(!$prev) {
         $prev = document.querySelector('tbody tr:last-child');
     }
 
@@ -304,28 +286,17 @@ function trackClick($elm){
     playAudio();
 }
 
-$volume.oninput = function (){
-    song.volume = $volume.value;
-    if (volZeroPause) {
-        if (song.volume <= 0) {
-            pauseAudio();
-        } else if (song.paused) {
-            playAudio()
-        }
-    }
-};
-
 $tracker.oninput = function(event){
     song.currentTime = song.duration / event.target.max * event.target.value;
 };
 
 function removeClass($elm, clss){
-    if ($elm){
+    if($elm){
         $elm.classList.remove(clss);
     }
 }
 function addClass($elm, clss){
-    if ($elm){
+    if($elm){
         $elm.classList.add(clss);
     }
 }
@@ -341,4 +312,36 @@ $panCtrl.ondblclick = function() {
     panNde.pan.value = 0;
     $panVal.innerHTML = 0;
     $panCtrl.value = 0;
+};
+
+var muteVol;
+$mute.onclick = function(){
+	if($mute.classList.contains(active)) {
+		song.volume = muteVol;
+		removeClass($mute, active);
+	}else{
+		muteVol = song.volume;
+		song.volume = 0;
+		addClass($mute, active);
+	}
+};
+
+$volume.ondblclick = function(){
+	volZeroPause = !volZeroPause;
+	if(!volZeroPause && song.volume <= 0 && song.currentTime > 0){
+		song.volume = 0.1;
+		$volume.value = 10;
+		playAudio()
+	}
+};
+
+$volume.oninput = function(){
+	song.volume = $volume.value;
+	if(volZeroPause) {
+		if(song.volume <= 0) {
+			pauseAudio();
+		} else if(song.paused) {
+			playAudio()
+		}
+	}
 };
