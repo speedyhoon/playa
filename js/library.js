@@ -25,16 +25,25 @@ ajaxRequest.open("GET", "library2", true);
 ajaxRequest.send(null);
 
 var song = new Audio(), repeat = repeatAll;
-song.addEventListener('timeupdate',function (){
+song.addEventListener('timeupdate',function(){
 	$tracker.value = (song.currentTime / song.duration * 100)||0;
 	if(countUp) {
 		showTime(song.currentTime);
 	}else{
 		showTime(song.duration - song.currentTime);
 	}
+
+	//toggle previous & rewind buttons when media reaches 5 seconds
+	if(song.currentTime >= 5){
+		$rwd.hidden = false;
+		$prv.hidden = true;
+	}else{
+		$rwd.hidden = true;
+		$prv.hidden = false;
+	}
 });
 
-song.addEventListener('ended',function (){
+song.addEventListener('ended',function(){
 	forward(true);
 });
 
@@ -153,7 +162,7 @@ function initAudio($elem) {
 	addClass($elem, active);
 }
 
-$play.onclick = function () {
+$play.onclick = function(){
 	if(!$play.hidden && $volume.value <= 0){
 		volume(.1);
 	}
@@ -173,7 +182,7 @@ function playAudio() {
 	$pause.hidden = false;
 }
 
-$pause.onclick = function () {
+$pause.onclick = function(){
 	pauseAudio();
 };
 function pauseAudio() {
@@ -182,12 +191,12 @@ function pauseAudio() {
 	$pause.hidden = true;
 }
 
-$stop.onclick = function () {
+$stop.onclick = function(){
 	pauseAudio();
 	song.currentTime = 0;
 };
 
-$lapsed.onclick = function () {
+$lapsed.onclick = function(){
 	countUp = !countUp;
 	if(countUp) {
 		$lapsed.title = "Elapsed"
@@ -196,7 +205,7 @@ $lapsed.onclick = function () {
 	}
 };
 
-$nxt.onclick = function () {
+$nxt.onclick = function(){
 	forward();
 };
 function forward(hasEnded){
@@ -217,24 +226,21 @@ function forward(hasEnded){
 	playAudio();
 }
 
-$rwd.onclick = function () {
-	//threshold to go to previous track
-	if($tracker.value >= 5){
-		song.currentTime = 0;
-		return
-	}
-	pauseAudio();
+$rwd.onclick = function(){
+	song.currentTime = 0;
+};
 
+$prv.onclick = function(){
 	var $prev = document.querySelector('tbody .'+active).previousElementSibling;
 	if(!$prev) {
-		$prev = document.querySelector('tbody :last-child');
+		$prev = document.querySelector('tbody tr:last-child');
 	}
 
 	initAudio($prev);
 	playAudio();
 };
 
-$repeat.onclick = function () {
+$repeat.onclick = function(){
 	repeat++;
 	song.loop = repeat === repeatOne;
 	switch(repeat){
@@ -253,24 +259,8 @@ $repeat.onclick = function () {
 	}
 };
 
-$prv.onclick = function (e) {
-	//threshold to go to previous track
-	if($tracker.value >= 5){
-		song.currentTime = 0;
-		return
-	}
-
-	var $prev = document.querySelector('tbody .'+active).previousElementSibling;
-	if(!$prev) {
-		$prev = document.querySelector('tbody tr:last-child');
-	}
-
-	initAudio($prev);
-	playAudio()
-};
-
 // show playlist
-$cover.onclick = function () {
+$cover.onclick = function(){
 	var $playlist = document.querySelector('table');
 	$playlist.hidden = !$playlist.hidden;
 };
