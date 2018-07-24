@@ -155,6 +155,13 @@ function pad(num) {
     return num >= 10 ? num : '0'+num;
 }
 
+$play.onclick = function () {
+	if(!$play.hidden && $volume.value <= 0){
+		song.volume = 0.1;
+		$volume.value = 10;
+	}
+	playAudio();
+};
 function playAudio() {
 	song.play()
 	.then(function(){
@@ -168,18 +175,19 @@ function playAudio() {
 	$play.hidden = true;
 	$pause.hidden = false;
 }
+
+$pause.onclick = function () {
+	pauseAudio();
+};
 function pauseAudio() {
-    song.pause();
-    $play.hidden = false;
-    $pause.hidden = true;
+	song.pause();
+	$play.hidden = false;
+	$pause.hidden = true;
 }
 
-$play.onclick = function () {
-    if(!$play.hidden && $volume.value <= 0){
-        song.volume = 0.1;
-        $volume.value = 10;
-    }
-    playAudio();
+$stop.onclick = function () {
+	pauseAudio();
+	song.currentTime = 0;
 };
 
 $lapsed.onclick = function () {
@@ -191,14 +199,9 @@ $lapsed.onclick = function () {
     }
 };
 
-$pause.onclick = function () {
-    pauseAudio();
-};
-
 $nxt.onclick = function () {
     forward();
 };
-
 function forward(hasEnded){
     pauseAudio();
 
@@ -233,10 +236,7 @@ $rwd.onclick = function () {
     initAudio($prev);
     playAudio();
 };
-$stop.onclick = function () {
-    pauseAudio();
- 	song.currentTime = 0;
-};
+
 $repeat.onclick = function () {
     repeat++;
     song.loop = repeat === repeatOne;
@@ -258,12 +258,10 @@ $repeat.onclick = function () {
 
 $prv.onclick = function (e) {
     //threshold to go to previous track
-    // if($tracker.value >= 5){
-    //  song.currentTime = 0;
-    //  return
-    // }
-    // pauseAudio();
-    // mediaElement.pause();
+	if($tracker.value >= 5){
+		song.currentTime = 0;
+		return
+	}
 
     var $prev = document.querySelector('tbody .'+active).previousElementSibling;
     if(!$prev) {
