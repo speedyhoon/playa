@@ -1,4 +1,5 @@
-const active = 'active';
+const active = 'active',
+	repeatAll = 1, repeatOne = 2, repeatOff = 0;
 var ajaxRequest = new XMLHttpRequest();
 
 //executes when an ajax response is received
@@ -23,7 +24,6 @@ ajaxRequest.onreadystatechange = function(){
 ajaxRequest.open("GET", "library2", true);
 ajaxRequest.send(null);
 
-const repeatAll = 1, repeatOne = 2, repeatOff = 0;
 var song = new Audio(), repeat = repeatAll;
 song.addEventListener('timeupdate',function (){
 	$tracker.value = (song.currentTime / song.duration * 100)||0;
@@ -38,26 +38,17 @@ song.addEventListener('ended',function (){
 	forward(true);
 });
 
+function showTime(seconds){
+	seconds = ~~seconds;
+	$lapsed.textContent = ~~(seconds/60) +':'+ pad(seconds%60);
+}
+
+function pad(num) {
+	return num >= 10 ? num : '0'+num;
+}
+
+//Equaliser properties
 var audioCtx = new AudioContext();
-
-var countUp = false, volZeroPause = false;
-var $playlist = document.querySelector('.playlist');
-var $tracker = document.querySelector('.tracker');
-var $volume = document.querySelector('.volume');
-var $title = document.querySelector('.title');
-var $artist = document.querySelector('.artist');
-var $cover = document.querySelector('.cover');
-var $stop = document.querySelector('.stop');
-var $repeat = document.querySelector('.repeat');
-var $play = document.querySelector('.play');
-var $pause = document.querySelector('.pause');
-var $mute = document.querySelector('.mute');
-var $prv = document.querySelector('.prv');
-var $nxt = document.querySelector('.nxt');
-var $rwd = document.querySelector('.rwd');
-var $lapsed = document.querySelector('.lapsed');
-
-// EQ Properties
 var gainDb = -40.0;
 var bandSplit = [360,3600];
 var hBand = audioCtx.createBiquadFilter();
@@ -78,58 +69,35 @@ lBand.gain.value = gainDb;
 var lInvert = audioCtx.createGain();
 lInvert.gain.value = -1.0;
 
-function initAudio($elem) {
-    song.pause();
+ var sourceNode = audioCtx.createMediaElementSource(song);
 
-    $title.textContent = $elem.children[2].textContent;
-    $artist.textContent = $elem.children[0].textContent;
+ sourceNode.connect(lBand);
+ sourceNode.connect(mBand);
+ sourceNode.connect(hBand);
 
-    var url = ['library'];
-    if( $elem.children[0].textContent){
-        url.push($elem.children[0].textContent);
-    }
-    if( $elem.children[1].textContent){
-        url.push($elem.children[1].textContent);
-    }
-    url = url.join('/');
-    $cover.setAttribute('src', url +  `/cover.jpg`);
+ hBand.connect(hInvert);
+ lBand.connect(lInvert);
 
-    song.src = url+  '/'+$elem.children[2].textContent+'.mp3';
-    song.volume = $volume.value;
+ hInvert.connect(mBand);
+ lInvert.connect(mBand);
 
-    removeClass(document.querySelector('tbody .'+active), active);
-    addClass($elem, active);
-}
+ var lGain = audioCtx.createGain();
+ var mGain = audioCtx.createGain();
+ var hGain = audioCtx.createGain();
 
-    var sourceNode = audioCtx.createMediaElementSource(song);
+ lBand.connect(lGain);
+ mBand.connect(mGain);
+ hBand.connect(hGain);
 
-    sourceNode.connect(lBand);
-    sourceNode.connect(mBand);
-    sourceNode.connect(hBand);
+ var sum = audioCtx.createGain();
+ lGain.connect(sum);
+ mGain.connect(sum);
+ hGain.connect(sum);
 
-    hBand.connect(hInvert);
-    lBand.connect(lInvert);
+ var panNde = audioCtx.createStereoPanner();
+ sum.connect(panNde);
 
-    hInvert.connect(mBand);
-    lInvert.connect(mBand);
-
-    var lGain = audioCtx.createGain();
-    var mGain = audioCtx.createGain();
-    var hGain = audioCtx.createGain();
-
-    lBand.connect(lGain);
-    mBand.connect(mGain);
-    hBand.connect(hGain);
-
-    var sum = audioCtx.createGain();
-    lGain.connect(sum);
-    mGain.connect(sum);
-    hGain.connect(sum);
-
-    var panNde = audioCtx.createStereoPanner();
-    sum.connect(panNde);
-
-    panNde.connect(audioCtx.destination);
+ panNde.connect(audioCtx.destination);
 
 lGain.gain.value = parseFloat(document.querySelector('.low').value);
 mGain.gain.value = parseFloat(document.querySelector('.mid').value);
@@ -146,13 +114,44 @@ function changeGain(string,type) {
     }
 }
 
-function showTime(seconds){
-    seconds = ~~seconds;
-    $lapsed.textContent = ~~(seconds/60) +':'+ pad(seconds%60);
-}
+//User Interface
+var countUp = false, volZeroPause = false;
+var $tracker = document.querySelector('.tracker');
+var $volume = document.querySelector('.volume');
+var $title = document.querySelector('.title');
+var $artist = document.querySelector('.artist');
+var $cover = document.querySelector('.cover');
+var $stop = document.querySelector('.stop');
+var $repeat = document.querySelector('.repeat');
+var $play = document.querySelector('.play');
+var $pause = document.querySelector('.pause');
+var $mute = document.querySelector('.mute');
+var $prv = document.querySelector('.prv');
+var $nxt = document.querySelector('.nxt');
+var $rwd = document.querySelector('.rwd');
+var $lapsed = document.querySelector('.lapsed');
 
-function pad(num) {
-    return num >= 10 ? num : '0'+num;
+function initAudio($elem) {
+	song.pause();
+
+	$title.textContent = $elem.children[2].textContent;
+	$artist.textContent = $elem.children[0].textContent;
+
+	var url = ['library'];
+	if( $elem.children[0].textContent){
+		url.push($elem.children[0].textContent);
+	}
+	if( $elem.children[1].textContent){
+		url.push($elem.children[1].textContent);
+	}
+	url = url.join('/');
+	$cover.setAttribute('src', url +  `/cover.jpg`);
+
+	song.src = url+  '/'+$elem.children[2].textContent+'.mp3';
+	song.volume = $volume.value;
+
+	removeClass(document.querySelector('tbody .'+active), active);
+	addClass($elem, active);
 }
 
 $play.onclick = function () {
@@ -165,7 +164,7 @@ $play.onclick = function () {
 function playAudio() {
 	song.play()
 	.then(function(){
-		console.log("Yay! Video is playing!");
+		//console.log("Yay! Video is playing!");
 	})
 	.catch(function(error) {
 		//An error ocurred or the user agent prevented playback
@@ -274,7 +273,8 @@ $prv.onclick = function (e) {
 
 // show playlist
 $cover.onclick = function () {
-    $playlist.hidden = !$playlist.hidden
+	var $playlist = document.querySelector('table');
+	$playlist.hidden = !$playlist.hidden;
 };
 
 // playlist elements - click
