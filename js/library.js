@@ -69,35 +69,35 @@ lBand.gain.value = gainDb;
 var lInvert = audioCtx.createGain();
 lInvert.gain.value = -1.0;
 
- var sourceNode = audioCtx.createMediaElementSource(song);
+var sourceNode = audioCtx.createMediaElementSource(song);
 
- sourceNode.connect(lBand);
- sourceNode.connect(mBand);
- sourceNode.connect(hBand);
+sourceNode.connect(lBand);
+sourceNode.connect(mBand);
+sourceNode.connect(hBand);
 
- hBand.connect(hInvert);
- lBand.connect(lInvert);
+hBand.connect(hInvert);
+lBand.connect(lInvert);
 
- hInvert.connect(mBand);
- lInvert.connect(mBand);
+hInvert.connect(mBand);
+lInvert.connect(mBand);
 
- var lGain = audioCtx.createGain();
- var mGain = audioCtx.createGain();
- var hGain = audioCtx.createGain();
+var lGain = audioCtx.createGain();
+var mGain = audioCtx.createGain();
+var hGain = audioCtx.createGain();
 
- lBand.connect(lGain);
- mBand.connect(mGain);
- hBand.connect(hGain);
+lBand.connect(lGain);
+mBand.connect(mGain);
+hBand.connect(hGain);
 
- var sum = audioCtx.createGain();
- lGain.connect(sum);
- mGain.connect(sum);
- hGain.connect(sum);
+var sum = audioCtx.createGain();
+lGain.connect(sum);
+mGain.connect(sum);
+hGain.connect(sum);
 
- var panNde = audioCtx.createStereoPanner();
- sum.connect(panNde);
+var panNde = audioCtx.createStereoPanner();
+sum.connect(panNde);
 
- panNde.connect(audioCtx.destination);
+panNde.connect(audioCtx.destination);
 
 lGain.gain.value = parseFloat(document.querySelector('.low').value);
 mGain.gain.value = parseFloat(document.querySelector('.mid').value);
@@ -106,8 +106,7 @@ hGain.gain.value = parseFloat(document.querySelector('.high').value);
 function changeGain(string,type) {
 	var value = parseFloat(string);
 
-	switch(type)
-	{
+	switch(type){
 		case 'lowGain': lGain.gain.value = value; break;
 		case 'midGain': mGain.gain.value = value; break;
 		case 'highGain': hGain.gain.value = value; break;
@@ -156,8 +155,7 @@ function initAudio($elem) {
 
 $play.onclick = function () {
 	if(!$play.hidden && $volume.value <= 0){
-		song.volume = 0.1;
-		$volume.value = 10;
+		volume(.1);
 	}
 	playAudio();
 };
@@ -311,14 +309,11 @@ $panCtrl.ondblclick = function() {
 	$panCtrl.value = 0;
 };
 
-var muteVol;
 $mute.onclick = function(){
+	song.muted = !song.muted;
 	if($mute.classList.contains(active)) {
-		song.volume = muteVol;
 		removeClass($mute, active);
 	}else{
-		muteVol = song.volume;
-		song.volume = 0;
 		addClass($mute, active);
 	}
 };
@@ -326,8 +321,7 @@ $mute.onclick = function(){
 $volume.ondblclick = function(){
 	volZeroPause = !volZeroPause;
 	if(!volZeroPause && song.volume <= 0 && song.currentTime > 0){
-		song.volume = 0.1;
-		$volume.value = 10;
+		volume(.1);
 		playAudio();
 	}
 };
@@ -338,7 +332,11 @@ $volume.oninput = function(){
 		if(song.volume <= 0) {
 			pauseAudio();
 		} else if(song.paused) {
-			playAudio()
+			playAudio();
 		}
 	}
 };
+function volume(value){
+	song.volume = value;
+	$volume.value = value;
+}
