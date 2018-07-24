@@ -25,6 +25,18 @@ ajaxRequest.send(null);
 
 const repeatAll = 1, repeatOne = 2, repeatOff = 0;
 var song = new Audio(), repeat = repeatAll;
+song.addEventListener('timeupdate',function (){
+	$tracker.value = (song.currentTime / song.duration * 100)||0;
+	if(countUp) {
+		showTime(song.currentTime);
+	}else{
+		showTime(song.duration - song.currentTime);
+	}
+});
+
+song.addEventListener('ended',function (){
+	forward(true);
+});
 
 var audioCtx = new AudioContext();
 
@@ -85,20 +97,7 @@ function initAudio($elem) {
     song.src = url+  '/'+$elem.children[2].textContent+'.mp3';
     song.volume = $volume.value;
 
-    song.addEventListener('timeupdate',function (){
-        $tracker.value = (song.currentTime / song.duration * 100)||0;
-        if(countUp) {
-            showTime(song.currentTime);
-        }else{
-            showTime(song.duration - song.currentTime);
-        }
-    });
-
-    song.addEventListener('ended',function (){
-        forward('ended');
-    });
-
-    removeClass(document.querySelector('tbody .active'), active);
+    removeClass(document.querySelector('tbody .'+active), active);
     addClass($elem, active);
 }
 
@@ -157,15 +156,15 @@ function pad(num) {
 }
 
 function playAudio() {
-	var promise = song.play();
-	if(promise !== undefined) {
-			promise.catch(function() {
-			//playback failed, so skip to the next track
-			//$nxt.click();
-			debugger;
-			return
-		});
-	}
+	song.play()
+	.then(function(){
+		console.log("Yay! Video is playing!");
+	})
+	.catch(function(error) {
+		//An error ocurred or the user agent prevented playback
+		console.log("Error: " + error);
+	});
+
 	$play.hidden = true;
 	$pause.hidden = false;
 }
@@ -209,7 +208,7 @@ function forward(hasEnded){
         }
     }
 
-    var $next = document.querySelector('tbody .active').nextElementSibling;
+    var $next = document.querySelector('tbody .'+active).nextElementSibling;
     if(!$next) {
         $next = document.querySelector('tbody :first-child');
     }
@@ -226,7 +225,7 @@ $rwd.onclick = function () {
     }
     pauseAudio();
 
-    var $prev = document.querySelector('tbody .active').previousElementSibling;
+    var $prev = document.querySelector('tbody .'+active).previousElementSibling;
     if(!$prev) {
         $prev = document.querySelector('tbody :last-child');
     }
@@ -266,7 +265,7 @@ $prv.onclick = function (e) {
     // pauseAudio();
     // mediaElement.pause();
 
-    var $prev = document.querySelector('tbody tr.active').previousElementSibling;
+    var $prev = document.querySelector('tbody .'+active).previousElementSibling;
     if(!$prev) {
         $prev = document.querySelector('tbody tr:last-child');
     }
@@ -331,7 +330,7 @@ $volume.ondblclick = function(){
 	if(!volZeroPause && song.volume <= 0 && song.currentTime > 0){
 		song.volume = 0.1;
 		$volume.value = 10;
-		playAudio()
+		playAudio();
 	}
 };
 
