@@ -19,8 +19,8 @@ func serveDir(dir, contentType string) {
 			//if dir != "/" {        //root index
 			//w.Header().Set("Content-Type", mimeType(dir)) //Expires now
 			w.Header().Set("Content-Type", contentType) //Expires now
-			w.Header().Set("Cache-Control", "public, max-age=31536000")
-			w.Header().Set("Vary", "Accept-Encoding") //stackoverflow.com/questions/14540490/is-vary-accept-encoding-overkill
+			//w.Header().Set("Cache-Control", "public, max-age=31536000")
+			//w.Header().Set("Vary", "Accept-Encoding") //stackoverflow.com/questions/14540490/is-vary-accept-encoding-overkill
 			//}
 			//Always set a gzip compressed response
 			//w.Header().Set("Content-Encoding", "gzip")
