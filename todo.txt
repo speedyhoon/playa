@@ -6,7 +6,6 @@ playlist art cover
 open playlists
 drag & drop shuffled tracks & playlists for reordering
 save track reordering - edited playlists
-Equaliser reset button
 Equaliser presets
 Save Equaliser settings
 Add support for Videos
