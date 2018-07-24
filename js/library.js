@@ -4,33 +4,18 @@ var ajaxRequest = new XMLHttpRequest();
 ajaxRequest.onreadystatechange = function(){
     if(ajaxRequest.readyState === 4 && ajaxRequest.status === 200) {
         var lib = JSON.parse(ajaxRequest.responseText);
-        var list = document.querySelector(".playlist");
-        // var list = document.querySelector("tbody");
+        var list = document.querySelector("tbody");
         for(var i =0; i< lib.length; i++){
 
-           /* var tbody = document.createElement('tbody');
-            tbody.innerHTML = "<tr><td>${lib[i].Artist}<td>lib[i].Album<td>lib[i].Title";
+            var tbody = document.createElement('tbody');
+            tbody.innerHTML = `<tr><td>${lib[i].Artist}<td>${lib[i].Album}<td>${lib[i].Title}`;
             var tr = tbody.children[0];
             tr.onclick = function(event){
-                trackClick(event.target);
+                trackClick(event.target.parentElement);
             };
             list.appendChild(tr);
-            */
-
-            var li = document.createElement('li');
-
-            li.textContent = lib[i].Artist+', '+lib[i].Album+', '+lib[i].Title;
-            li.setAttribute('audiourl', 'library/'+lib[i].Dir +'/'+ lib[i].File);
-            li.setAttribute('artist', lib[i].Artist);
-            li.setAttribute('album', lib[i].Album);
-            li.setAttribute('cover', 'library/'+lib[i].Artist + '/'+lib[i].Album+'/cover.jpg');
-            li.onclick = function(event){
-                trackClick(event.target);
-            };
-            list.appendChild(li);
-
-            initAudio(document.querySelector('.playlist li:first-child'));
         }
+        initAudio(document.querySelector('tbody tr:first-child'));
     }
 };
 
@@ -38,33 +23,29 @@ ajaxRequest.open("GET", "library2", true);
 ajaxRequest.send(null);
 
 const repeatAll = 1, repeatOne = 2, repeatOff = 0;
-var song, repeat = repeatAll, repeatUpTo = 0;
+var song = new Audio(), repeat = repeatAll;
 
-var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-var panNde = audioCtx.createStereoPanner();
+var audioCtx = new AudioContext();
 
 var countUp = false, volZeroPause = false;
 var $playlist = document.querySelector('.playlist');
 var $tracker = document.querySelector('.tracker');
 var $volume = document.querySelector('.volume');
-var $title = document.querySelector('.player .title');
-var $artist = document.querySelector('.player .artist');
-var $cover = document.querySelector('.player .cover');
+var $title = document.querySelector('.title');
+var $artist = document.querySelector('.artist');
+var $cover = document.querySelector('.cover');
 var $stop = document.querySelector('.stop');
 var $repeat = document.querySelector('.repeat');
 var $play = document.querySelector('.play');
 var $pause = document.querySelector('.pause');
-var $fwd = document.querySelector('.fwd');
-var $rew = document.querySelector('.rew');
+var $mute = document.querySelector('.mute');
+var $prv = document.querySelector('.prv');
+var $nxt = document.querySelector('.nxt');
+var $rwd = document.querySelector('.rwd');
 var $lapsed = document.querySelector('.lapsed');
 
-
-
-var lGain = audioCtx.createGain();
-var mGain = audioCtx.createGain();
-var hGain = audioCtx.createGain();
-// var gainDb = -1.0;
-var gainDb = 0;
+// EQ Properties
+var gainDb = -40.0;
 var bandSplit = [360,3600];
 var hBand = audioCtx.createBiquadFilter();
 hBand.type = "lowshelf";
@@ -72,8 +53,7 @@ hBand.frequency.value = bandSplit[0];
 hBand.gain.value = gainDb;
 
 var hInvert = audioCtx.createGain();
-// hInvert.gain.value = -1.0;
-hInvert.gain.value = 0;
+hInvert.gain.value = -1.0;
 
 var mBand = audioCtx.createGain();
 
@@ -83,16 +63,26 @@ lBand.frequency.value = bandSplit[1];
 lBand.gain.value = gainDb;
 
 var lInvert = audioCtx.createGain();
-lInvert.gain.value = 0;
+lInvert.gain.value = -1.0;
 
 function initAudio($elem) {
-    $title.textContent = $elem.textContent;
-    $artist.textContent = $elem.getAttribute('artist');
-    $cover.setAttribute('src', $elem.getAttribute('cover'));
+    song.pause();
 
-    song = new Audio($elem.getAttribute('audiourl'));
-    song.volume = $volume.value/100;
-    //song.preload = "auto"; //chrome sets this by default
+    $title.textContent = $elem.children[2].textContent;
+    $artist.textContent = $elem.children[0].textContent;
+
+    var url = ['library'];
+    if( $elem.children[0].textContent){
+        url.push($elem.children[0].textContent);
+    }
+    if( $elem.children[1].textContent){
+        url.push($elem.children[1].textContent);
+    }
+    url = url.join('/');
+    $cover.setAttribute('src', url +  `/cover.jpg`);
+
+    song.src = url+  '/'+$elem.children[2].textContent+'.mp3';
+    song.volume = $volume.value;
 
     song.addEventListener('timeupdate',function (){
         $tracker.value = (song.currentTime / song.duration * 100)||0;
@@ -107,20 +97,11 @@ function initAudio($elem) {
         forward('ended');
     });
 
-    removeClass(document.querySelector('.playlist .active'), 'active');
+    removeClass(document.querySelector('tbody .active'), 'active');
     addClass($elem, 'active');
+}
 
     var sourceNode = audioCtx.createMediaElementSource(song);
-
-    // var context = new AudioContext();
-    // var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    // var mediaElement = document.getElementById('player');
-    // var sourceNode = audioCtx.createMediaElementSource(mediaElement);
-    // var sourceNode = audioCtx.createMediaElementSource(song);
-
-    // EQ Properties
-    //
-
 
     sourceNode.connect(lBand);
     sourceNode.connect(mBand);
@@ -132,26 +113,30 @@ function initAudio($elem) {
     hInvert.connect(mBand);
     lInvert.connect(mBand);
 
+    var lGain = audioCtx.createGain();
+    var mGain = audioCtx.createGain();
+    var hGain = audioCtx.createGain();
 
     lBand.connect(lGain);
     mBand.connect(mGain);
     hBand.connect(hGain);
 
     var sum = audioCtx.createGain();
-    sourceNode.connect(panNde);
     lGain.connect(sum);
     mGain.connect(sum);
     hGain.connect(sum);
 
-    // sum.connect(panNde)
-    // sum.connect(audioCtx.destination);
+    var panNde = audioCtx.createStereoPanner();
+    sum.connect(panNde);
 
     panNde.connect(audioCtx.destination);
-    sum.connect(panNde);
-}
+
+lGain.gain.value = parseFloat(document.querySelector('.low').value);
+mGain.gain.value = parseFloat(document.querySelector('.mid').value);
+hGain.gain.value = parseFloat(document.querySelector('.high').value);
 
 function changeGain(string,type) {
-    var value = parseFloat(string) / 100.0;
+    var value = parseFloat(string);
 
     switch(type)
     {
@@ -175,7 +160,7 @@ function playAudio() {
     if (promise !== undefined) {
         promise.catch(function() {
             //playback failed, so skip to the next track
-            $fwd.click();
+            $nxt.click();
         });
     }
     $play.hidden = true;
@@ -183,9 +168,6 @@ function playAudio() {
 }
 function pauseAudio(stop) {
     song.pause();
-    if (stop) {
-        song.currentTime = 0;
-    }
     $play.hidden = false;
     $pause.hidden = true;
 }
@@ -199,6 +181,18 @@ $volume.ondblclick = function (e) {
     }
 };
 
+var muteVol;
+$mute.onclick = function() {
+    if($mute.classList.contains('active')) {
+        song.volume = muteVol;
+        removeClass($mute, 'active');
+    }else{
+        muteVol = song.volume;
+        song.volume = 0;
+        addClass($mute, 'active');
+    }
+};
+
 $play.onclick = function (e) {
     e.preventDefault();
     if (!$play.hidden && $volume.value <= 0){
@@ -209,7 +203,6 @@ $play.onclick = function (e) {
 };
 
 $lapsed.onclick = function (e) {
-    // e.preventDefault();
     countUp = !countUp;
     if (countUp) {
         $lapsed.title = "Elapsed"
@@ -223,7 +216,7 @@ $pause.onclick = function (e) {
     pauseAudio();
 };
 
-$fwd.onclick = function (e) {
+$nxt.onclick = function (e) {
     e.preventDefault();
     forward();
 };
@@ -237,16 +230,16 @@ function forward(hasEnded){
         }
     }
 
-    var $next = document.querySelector('.playlist .active').nextElementSibling;
+    var $next = document.querySelector('tbody .active').nextElementSibling;
     if (!$next) {
-        $next = document.querySelector('.playlist :first-child');
+        $next = document.querySelector('tbody :first-child');
     }
 
     initAudio($next);
     playAudio();
 }
 
-$rew.onclick = function (e) {
+$rwd.onclick = function (e) {
     e.preventDefault();
 
     //threshold to go to previous track
@@ -256,17 +249,18 @@ $rew.onclick = function (e) {
     }
     pauseAudio();
 
-    var $prev = document.querySelector('.playlist .active').previousElementSibling;
+    var $prev = document.querySelector('tbody .active').previousElementSibling;
     if (!$prev) {
-        $prev = document.querySelector('.playlist :last-child');
+        $prev = document.querySelector('tbody :last-child');
     }
 
     initAudio($prev);
     playAudio();
 };
 $stop.onclick = function (e) {
-    e.preventDefault();
-    pauseAudio(true);
+	e.preventDefault();
+    pauseAudio();
+ 	song.currentTime = 0;
 };
 $repeat.onclick = function (e) {
     e.preventDefault();
@@ -288,6 +282,26 @@ $repeat.onclick = function (e) {
     }
 };
 
+$prv.onclick = function (e) {
+    // e.preventDefault();
+
+    //threshold to go to previous track
+    // if ($tracker.value >= 5){
+    //  song.currentTime = 0;
+    //  return
+    // }
+    // pauseAudio();
+    // mediaElement.pause();
+
+    var $prev = document.querySelector('tbody tr.active').previousElementSibling;
+    if (!$prev) {
+        $prev = document.querySelector('tbody tr:last-child');
+    }
+
+    initAudio($prev);
+    playAudio()
+};
+
 // show playlist
 $cover.onclick = function (e) {
     e.preventDefault();
@@ -296,14 +310,12 @@ $cover.onclick = function (e) {
 
 // playlist elements - click
 function trackClick($elm){
-    console.log($elm);
-    pauseAudio();
     initAudio($elm);
     playAudio();
 }
 
 $volume.oninput = function (event){
-    song.volume = $volume.value/100;
+    song.volume = $volume.value;
     if (volZeroPause) {
         if (song.volume <= 0) {
             pauseAudio();
@@ -334,4 +346,9 @@ var $panVal = document.querySelector('.panVal');
 $panCtrl.oninput = function() {
     panNde.pan.value = $panCtrl.value;
     $panVal.innerHTML = $panCtrl.value;
+};
+$panCtrl.ondblclick = function() {
+    panNde.pan.value = 0;
+    $panVal.innerHTML = 0;
+    $panCtrl.value = 0;
 };

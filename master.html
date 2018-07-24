@@ -3,28 +3,31 @@
 <meta name=viewport content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0'>
 <title>HTML5 Audio player</title>
 <link href=css/styles.css rel=stylesheet>
-
 <div class=player>
-    <div class=title></div>
-    <div class=artist></div>
-    <img class=cover>
-    <div class=controls>
-        <div class=play title=Play></div>
-        <div class=pause title=Pause hidden></div>
-        <div class=rew title=Rewind></div>
-        <div class=fwd title='Next Track'></div>
-        <div class=stop title=Stop></div>
-        <div class='repeat repeatAll' title=Repeat></div>
-    </div>
+    <div hidden class=title></div>
+    <div hidden class=artist></div>
+	<img class=cover width=95 height=95>
+	<div class=play title=Play>Play</div>
+	<div class=pause title=Pause hidden>Pause</div>
+	<div class=stop title=Stop>Stop</div>
+	<div class=nxt title='Next Track'>Next</div>
+	<div class=rwd title=Rewind>Rewind</div>
+	<div class=prv title='Previous Track'>Previous</div>
+    <div class='repeat repeatAll' title=Repeat>Repeat</div>
 
-    <input type=range class=volume name=volume max=100>
-    <input type=range class=tracker name=volume max=100 value=0>
-    <div class=lapsed title=Elapsed>0</div>
-    <input class=panCtrl type=range min=-1 max=1 step=0.1 value=0>
-    <span class=panVal>0</span>
+	Volume <input type=range class=volume min=0 step=.01 max=1 value=.5> <span class=mute title=Mute>Mute</span>
+    <br>
+	<input type=range class=tracker max=100 value=0> <span class=lapsed title=Elapsed>0</span>
+	<br>
+    Balance <input class=panCtrl type=range min=-1 max=1 step=.1 value=0> <span class=panVal>0</span>
+	<br>
+	Low <input class=low type=range value=.6 min=0 max=1 step=.01 oninput=changeGain(this.value,'lowGain')>
+	<br>
+	Mid <input class=mid type=range value=.5 min=0 step=.01 max=1 oninput=changeGain(this.value,'midGain')>
+	<br>
+	High <input class=high type=range value=.2 min=0 step=.01 max=1 oninput=changeGain(this.value,'highGain')>
 </div>
-<ul class=playlist></ul>
-<!--table>
+<table>
     <thead>
         <tr>
             <th>Artist
@@ -32,11 +35,5 @@
             <th>Song
         </tr>
     <tbody>
-</table-->
-<script src=js/library.js></script>
-
-Low <input type=range value=0 min=-100 max=100 oninput=changeGain(this.value,'lowGain')>
-<br>
-Mid <input type=range value=0 min=-100 max=100 oninput=changeGain(this.value,'midGain')>
-<br>
-High <input type=range value=0 min=-100 max=100 oninput=changeGain(this.value,'highGain')>
+</table>
+<script defer src=js/library.js></script>
