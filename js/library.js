@@ -116,9 +116,9 @@ function changeGain(value,type) {
 	value = parseFloat(value);
 
 	switch(type){
-		case 'lowGain': lGain.gain.value = value; break;
-		case 'midGain': mGain.gain.value = value; break;
-		case 'highGain': hGain.gain.value = value; break;
+		case 'l': lGain.gain.value = value; break;
+		case 'm': mGain.gain.value = value; break;
+		case 'h': hGain.gain.value = value; break;
 	}
 }
 
