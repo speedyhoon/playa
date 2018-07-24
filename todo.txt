@@ -1,7 +1,14 @@
 Shuffle
-drag & drop tracks for reordering
-save drag & drop tracks reordering
-Equaliser
+Sort playlist by Artist, Albumn, Genre and Title
+Search for songs
+Add support for reading Playlist files
+playlist art cover
+open playlists
+drag & drop shuffled tracks & playlists for reordering
+save track reordering - edited playlists
 Equaliser reset button
 Equaliser presets
-Save Equaliser
+Save Equaliser settings
+Add support for Videos
+Add support for Pictures
+Add button to filter types of content if directory contains video, pictures & music
