@@ -172,7 +172,7 @@ function pauseAudio(stop) {
     $pause.hidden = true;
 }
 
-$volume.ondblclick = function (e) {
+$volume.ondblclick = function () {
     volZeroPause = !volZeroPause;
     if(!volZeroPause && song.volume <= 0 && song.currentTime > 0){
         song.volume = 0.1;
@@ -193,8 +193,7 @@ $mute.onclick = function() {
     }
 };
 
-$play.onclick = function (e) {
-    e.preventDefault();
+$play.onclick = function () {
     if (!$play.hidden && $volume.value <= 0){
         song.volume = 0.1;
         $volume.value = 10;
@@ -202,7 +201,7 @@ $play.onclick = function (e) {
     playAudio();
 };
 
-$lapsed.onclick = function (e) {
+$lapsed.onclick = function () {
     countUp = !countUp;
     if (countUp) {
         $lapsed.title = "Elapsed"
@@ -211,13 +210,11 @@ $lapsed.onclick = function (e) {
     }
 };
 
-$pause.onclick = function (e) {
-    e.preventDefault();
+$pause.onclick = function () {
     pauseAudio();
 };
 
-$nxt.onclick = function (e) {
-    e.preventDefault();
+$nxt.onclick = function () {
     forward();
 };
 
@@ -239,9 +236,7 @@ function forward(hasEnded){
     playAudio();
 }
 
-$rwd.onclick = function (e) {
-    e.preventDefault();
-
+$rwd.onclick = function () {
     //threshold to go to previous track
     if ($tracker.value >= 5){
         song.currentTime = 0;
@@ -257,13 +252,11 @@ $rwd.onclick = function (e) {
     initAudio($prev);
     playAudio();
 };
-$stop.onclick = function (e) {
-	e.preventDefault();
+$stop.onclick = function () {
     pauseAudio();
  	song.currentTime = 0;
 };
-$repeat.onclick = function (e) {
-    e.preventDefault();
+$repeat.onclick = function () {
     repeat++;
     song.loop = repeat === repeatOne;
     switch(repeat){
@@ -283,8 +276,6 @@ $repeat.onclick = function (e) {
 };
 
 $prv.onclick = function (e) {
-    // e.preventDefault();
-
     //threshold to go to previous track
     // if ($tracker.value >= 5){
     //  song.currentTime = 0;
@@ -303,8 +294,7 @@ $prv.onclick = function (e) {
 };
 
 // show playlist
-$cover.onclick = function (e) {
-    e.preventDefault();
+$cover.onclick = function () {
     $playlist.hidden = !$playlist.hidden
 };
 
@@ -314,7 +304,7 @@ function trackClick($elm){
     playAudio();
 }
 
-$volume.oninput = function (event){
+$volume.oninput = function (){
     song.volume = $volume.value;
     if (volZeroPause) {
         if (song.volume <= 0) {
