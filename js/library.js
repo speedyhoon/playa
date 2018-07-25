@@ -178,7 +178,13 @@ function play() {
 	song.play()
 	.catch(function(err) {
 		//An error occurred or the user agent prevented playback
+		var tr = document.querySelector('tbody .'+active);
+		addClass(tr.querySelector('td:first-child'), 'warning');
+
 		console.warn(err, song && song.src);
+		if(tr.nextElementSibling){
+			next();
+		}
 	});
 
 	$play.hidden = true;
@@ -273,7 +279,7 @@ function trackClick($elm){
 }
 
 $tracker.oninput = function(event){
-	song.currentTime = song.duration / event.target.max * event.target.value;
+	song.currentTime = (song.duration || 0) / event.target.max * event.target.value;
 };
 
 function removeClass($elm, clss){
