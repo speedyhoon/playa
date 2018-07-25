@@ -53,6 +53,9 @@ tbody tr,.cover{
 [hidden] {
 	display: none;
 }
+.warning {
+	background: yellow;
+}
 /*.title, .artist {
 	 font-family: verdana;
 	 left: 167px;
