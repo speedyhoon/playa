@@ -18,7 +18,8 @@ body {
 }
 .player{
 	width: 500px;
-	background: url(/png/record.png) no-repeat 61px 13px, linear-gradient(to bottom, #555 0%,#444 100%);
+	background: linear-gradient(to bottom, #555 0%,#444 100%);
+	padding-top: 110px;
 }
 tbody tr,.cover{
 	cursor: pointer;
@@ -39,11 +40,12 @@ tbody tr,.cover{
 .title {
 	position: absolute;
 	left: 160px;
+	top: 8px;
 }
 .artist {
 	position: absolute;
 	left: 160px;
-	top: 30px;
+	top: 35px;
 }
 .lapsed {
 	color: lime;
@@ -55,6 +57,19 @@ tbody tr,.cover{
 }
 .warning {
 	background: yellow;
+}
+.record{
+	background: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%,rgba(0,0,0,1) 5%,rgba(255,255,255,1) 7%,rgba(255,255,255,1) 21%,rgba(137,137,137,1) 22%,rgba(188,188,188,1) 25%,rgba(188,188,188,1) 40%,rgba(0,0,0,1) 41%,rgba(0,0,0,1) 70%,rgba(0,0,0,0) 71%);
+	position: absolute;
+	left: 62px;
+	width: 85px;
+	height: 85px;
+	top: 13px;
+}
+.cover{
+	position: absolute;
+	z-index: 1;
+	top: 8px;
 }
 /*.title, .artist {
 	 font-family: verdana;
