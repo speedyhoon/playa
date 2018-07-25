@@ -59,7 +59,7 @@ tbody tr,.cover{
 	background: yellow;
 }
 .record{
-	background: radial-gradient(ellipse at center, rgba(0,0,0,1) 0%,rgba(0,0,0,1) 5%,rgba(255,255,255,1) 7%,rgba(255,255,255,1) 21%,rgba(137,137,137,1) 22%,rgba(188,188,188,1) 25%,rgba(188,188,188,1) 40%,rgba(0,0,0,1) 41%,rgba(0,0,0,1) 70%,rgba(0,0,0,0) 71%);
+	background: radial-gradient(ellipse at center, #000 5%,#fff 7%,#fff 21%,#888 22%,#bbb 25%,#bbb 40%,#000 41%,#000 70%,#0000 71%);
 	position: absolute;
 	left: 62px;
 	width: 85px;
