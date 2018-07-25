@@ -184,6 +184,8 @@ function play() {
 		console.warn(err, song && song.src);
 		if(tr.nextElementSibling){
 			next();
+		}else{
+			removeClass(tr, active);
 		}
 	});
 
