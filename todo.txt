@@ -17,3 +17,4 @@ change record image to CSS gradient
 Add custom cursor to sort table headers cursor: n-resize;
 improve playlist styling
 display error message for failing to load a media resource print(error + ' '+ song.src.replace(document.location.origin+'/library', ''))
+load previous player settings via JSON request
