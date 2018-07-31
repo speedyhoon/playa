@@ -56,7 +56,7 @@ tbody tr,.cover{
 	display: none;
 }
 .warning {
-	background: yellow;
+	background: #660;
 }
 .record{
 	background: radial-gradient(ellipse at center, #000 5%,#fff 7%,#fff 21%,#888 22%,#bbb 25%,#bbb 40%,#000 41%,#000 70%,#0000 71%);
