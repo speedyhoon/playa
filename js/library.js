@@ -204,11 +204,11 @@ function getActiveTrack(){
 }
 
 function getFirstTrack(){
-	return document.querySelector('tbody  :first-child');
+	return document.querySelector('tbody  tr:first-child');
 }
 
 function getLastTrack(){
-	return document.querySelector('tbody :last-child');
+	return document.querySelector('tbody tr:last-child');
 }
 
 $pause.onclick = function(){
