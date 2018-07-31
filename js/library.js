@@ -175,11 +175,16 @@ $play.onclick = function(){
 	play();
 };
 function play() {
+	const warning = 'warning';
+	var tr = document.querySelector('tbody .'+active);
+
 	song.play()
+	.then(function(){
+		removeClass(tr, warning);
+	})
 	.catch(function(err) {
 		//An error occurred or the user agent prevented playback
-		var tr = document.querySelector('tbody .'+active);
-		addClass(tr.querySelector('td:first-child'), 'warning');
+		addClass(tr, warning);
 
 		console.warn(err, song && song.src);
 		if(tr.nextElementSibling){
@@ -226,8 +231,10 @@ function next(hasEnded){
 		}
 	}
 
-	var $next = document.querySelector('tbody .'+active).nextElementSibling;
-	if(!$next) {
+	var $next = document.querySelector('tbody .'+active);
+	if($next && $next.nextElementSibling) {
+		$next = $next.nextElementSibling;
+	}else{
 		$next = document.querySelector('tbody :first-child');
 	}
 
@@ -240,8 +247,10 @@ $rwd.onclick = function(){
 };
 
 $prv.onclick = function(){
-	var $prev = document.querySelector('tbody .'+active).previousElementSibling;
-	if(!$prev) {
+	var $prev = document.querySelector('tbody .'+active);
+	if($prev && $prev.previousElementSibling) {
+		$prev = $prev.previousElementSibling;
+	}else{
 		$prev = document.querySelector('tbody tr:last-child');
 	}
 
