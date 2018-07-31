@@ -1,6 +1,6 @@
-const active = 'active',
-	repeatAll = 1, repeatOne = 2, repeatOff = 0;
-var ajaxRequest = new XMLHttpRequest();
+const active = 'active', warning = 'warning',
+	repeatAll = 1, repeatOne = 2, repeatOff = 0,
+	ajaxRequest = new XMLHttpRequest();
 
 //executes when an ajax response is received
 ajaxRequest.onreadystatechange = function(){
@@ -47,6 +47,20 @@ song.addEventListener('timeupdate',function(){
 song.addEventListener('ended',function(){
 	next(true);
 });
+
+song.addEventListener('error', handleMediaError);
+
+function handleMediaError() {
+	//An error occurred or the user agent prevented playback
+
+	var tr = getActiveTrack();
+	addClass(tr, warning);
+	if(tr && tr.nextElementSibling){
+		next();
+	}else{
+		removeClass(tr, active);
+	}
+}
 
 function showTime(seconds){
 	$lapsed.textContent = ~~(seconds/60) +':'+ pad(~~seconds%60);
@@ -164,7 +178,7 @@ function initAudio($elem) {
 	song.src = url+  '/'+$elem.children[2].textContent+'.mp3';
 	song.volume = $volume.value;
 
-	removeClass(document.querySelector('tbody .'+active), active);
+	removeClass(getActiveTrack(), active);
 	addClass($elem, active);
 }
 
@@ -175,27 +189,18 @@ $play.onclick = function(){
 	play();
 };
 function play() {
-	const warning = 'warning';
-	var tr = document.querySelector('tbody .'+active);
-
 	song.play()
 	.then(function(){
-		removeClass(tr, warning);
+		removeClass(getActiveTrack(), warning);
 	})
-	.catch(function(err) {
-		//An error occurred or the user agent prevented playback
-		addClass(tr, warning);
-
-		console.warn(err, song && song.src);
-		if(tr.nextElementSibling){
-			next();
-		}else{
-			removeClass(tr, active);
-		}
-	});
+	.catch(handleMediaError);
 
 	$play.hidden = true;
 	$pause.hidden = false;
+}
+
+function getActiveTrack(){
+	return document.querySelector('tbody .'+active);
 }
 
 $pause.onclick = function(){
@@ -231,7 +236,7 @@ function next(hasEnded){
 		}
 	}
 
-	var $next = document.querySelector('tbody .'+active);
+	var $next = getActiveTrack();
 	if($next && $next.nextElementSibling) {
 		$next = $next.nextElementSibling;
 	}else{
@@ -247,7 +252,7 @@ $rwd.onclick = function(){
 };
 
 $prv.onclick = function(){
-	var $prev = document.querySelector('tbody .'+active);
+	var $prev = getActiveTrack();
 	if($prev && $prev.previousElementSibling) {
 		$prev = $prev.previousElementSibling;
 	}else{
