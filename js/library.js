@@ -17,7 +17,7 @@ ajaxRequest.onreadystatechange = function(){
 			};
 			list.appendChild(tr);
 		}
-		initAudio(document.querySelector('tbody tr:first-child'));
+		initAudio(getFirstTrack());
 		play();
 	}
 };
@@ -203,6 +203,14 @@ function getActiveTrack(){
 	return document.querySelector('tbody .'+active);
 }
 
+function getFirstTrack(){
+	return document.querySelector('tbody  :first-child');
+}
+
+function getLastTrack(){
+	return document.querySelector('tbody :last-child');
+}
+
 $pause.onclick = function(){
 	pause();
 };
@@ -240,7 +248,7 @@ function next(hasEnded){
 	if($next && $next.nextElementSibling) {
 		$next = $next.nextElementSibling;
 	}else{
-		$next = document.querySelector('tbody :first-child');
+		$next = getFirstTrack();
 	}
 
 	initAudio($next);
@@ -256,7 +264,7 @@ $prv.onclick = function(){
 	if($prev && $prev.previousElementSibling) {
 		$prev = $prev.previousElementSibling;
 	}else{
-		$prev = document.querySelector('tbody tr:last-child');
+		$prev = getLastTrack();
 	}
 
 	initAudio($prev);
