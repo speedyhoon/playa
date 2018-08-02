@@ -48,10 +48,19 @@ song.addEventListener('ended',function(){
 	next(true);
 });
 
-song.addEventListener('error', handleMediaError);
+song.addEventListener('error', function(e){
+	e.preventDefault();
+	handleMediaError(e);
+});
 
-function handleMediaError() {
+function handleMediaError(e) {
 	//An error occurred or the user agent prevented playback
+	if(e.target){
+		console.warn(e.target.error);
+		// return
+	}else{
+		console.warn(e);
+	}
 
 	var tr = getActiveTrack();
 	addClass(tr, warning);
@@ -60,6 +69,7 @@ function handleMediaError() {
 	}else{
 		removeClass(tr, active);
 	}
+	return false;
 }
 
 function showTime(seconds){
@@ -192,11 +202,14 @@ function play() {
 	song.play()
 	.then(function(){
 		removeClass(getActiveTrack(), warning);
+		$play.hidden = true;
+		$pause.hidden = false;
 	})
-	.catch(handleMediaError);
-
-	$play.hidden = true;
-	$pause.hidden = false;
+	.catch(function(e){
+		console.warn(e, song.src);
+		// handleMediaError(e);
+		return false;
+	});
 }
 
 function getActiveTrack(){
