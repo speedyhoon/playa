@@ -16,6 +16,14 @@ body {
 	position: relative;
 	user-select: none;
 }
+table{
+	border-collapse: collapse;
+	display: block;
+	width: 800px;
+}
+tbody tr:hover {
+	background: #777;
+}
 .player{
 	width: 500px;
 	background: linear-gradient(to bottom, #555 0%,#444 100%);
