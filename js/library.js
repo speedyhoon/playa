@@ -397,3 +397,10 @@ $mid.ondblclick = reset;
 
 $high.oninput = changeGain;
 $high.ondblclick = reset;
+
+document.querySelector('.shuffle').onclick = function(){
+	var ul = document.querySelector('tbody'), i = ul.children.length;
+	for (; i >= 0; i--) {
+		ul.appendChild(ul.children[Math.random() * i | 0]);
+	}
+};

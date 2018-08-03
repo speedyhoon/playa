@@ -24,7 +24,7 @@ body {
 tbody tr,.cover{
 	cursor: pointer;
 }
-.play,.pause,.stop,.nxt,.prv,.rwd,.repeat{
+.play,.pause,.stop,.nxt,.prv,.rwd,.repeat,.shuffle{
 	background: linear-gradient(to bottom, #666 0%,#444 100%);
 	width: 40px;
 	border: 1px solid #000;
