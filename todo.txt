@@ -12,7 +12,7 @@ Add support for Videos
 Add support for Pictures
 Add button to filter types of content if directory contains video, pictures & music
 Create new playlists
-change images to SVG sprites: play, pause, stop, rewind, previous, next, speaker, mute, repeat, repeat all, repeat off, sort direction
+change images to SVG sprites: play, pause, stop, rewind, previous, next, speaker, mute, repeat, repeat all, repeat off, shuffle, sort direction
 change record image to CSS gradient
 Add custom cursor to sort table headers cursor: n-resize;
 improve playlist styling
