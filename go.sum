@@ -1,0 +1,4 @@
+github.com/speedyhoon/cnst/hdr v0.0.0-20231101052807-adba6a7142e4 h1:zRpy9DkgI61ZVCXajfDC4B8oZthiWE1v8jXd8TGYDGE=
+github.com/speedyhoon/cnst/hdr v0.0.0-20231101052807-adba6a7142e4/go.mod h1:rTgoPnNHBO0bQy1yX2bVNquketxtVEdyS9xPsGto1S8=
+github.com/speedyhoon/cnst/mime v0.0.0-20231101052807-adba6a7142e4 h1:HrPEXRXOTmPsTN/T1mzASiuPQCXF4T7k/oF8Pkkb8xk=
+github.com/speedyhoon/cnst/mime v0.0.0-20231101052807-adba6a7142e4/go.mod h1:T4Nd24UVvB6OiRLeUub5wch1UnHMpLvm49l+J8KfenY=
