@@ -65,7 +65,7 @@ func main() {
 	}
 }
 
-func library(w http.ResponseWriter, r *http.Request) {
+func library(w http.ResponseWriter, _ *http.Request) {
 	const root = "library"
 	var tracks []Track
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
@@ -122,7 +122,6 @@ func trackDetails(root, path, name string) Track {
 	default:
 		return Track{Artist: dirs[0], Album: dirs[1], Title: dirs[2], File: filepath.Base(path), Dir: dir}
 	}
-	return Track{}
 }
 
 /*func zip(h http.Handler, w http.ResponseWriter, r *http.Request) {
