@@ -4,10 +4,10 @@ const active = 'active', warning = 'warning',
 
 //executes when an ajax response is received
 ajaxRequest.onreadystatechange = function(){
-	if(ajaxRequest.readyState === 4 && ajaxRequest.status === 200) {
+	if(ajaxRequest.readyState === 4 && ajaxRequest.status === 200){
 		var lib = JSON.parse(ajaxRequest.responseText);
 		var list = document.querySelector("tbody");
-		for(var i =0; i< lib.length; i++){
+		for(var i = 0; i < lib.length; i++){
 
 			var tbody = document.createElement('tbody');
 			tbody.innerHTML = `<tr><td>${lib[i].Artist}<td>${lib[i].Album}<td>${lib[i].Title}`;
@@ -26,9 +26,9 @@ ajaxRequest.open("GET", "library2", true);
 ajaxRequest.send(null);
 
 var song = new Audio(), repeat = repeatAll;
-song.addEventListener('timeupdate',function(){
-	$tracker.value = (song.currentTime / song.duration * 100)||0;
-	if(countUp) {
+song.addEventListener('timeupdate', function(){
+	$tracker.value = (song.currentTime / song.duration * 100) || 0;
+	if(countUp){
 		showTime(song.currentTime);
 	}else{
 		showTime(song.duration - song.currentTime);
@@ -44,7 +44,7 @@ song.addEventListener('timeupdate',function(){
 	}
 });
 
-song.addEventListener('ended',function(){
+song.addEventListener('ended', function(){
 	next(true);
 });
 
@@ -53,7 +53,7 @@ song.addEventListener('error', function(e){
 	handleMediaError(e);
 });
 
-function handleMediaError(e) {
+function handleMediaError(e){
 	//An error occurred or the user agent prevented playback
 	if(e.target){
 		console.warn(e.target.error);
@@ -73,18 +73,18 @@ function handleMediaError(e) {
 }
 
 function showTime(seconds){
-	$lapsed.textContent = ~~(seconds/60) +':'+ pad(~~seconds%60);
+	$lapsed.textContent = ~~(seconds / 60) + ':' + pad(~~seconds % 60);
 }
 
-function pad(num) {
-	return num >= 10 ? num : '0'+num;
+function pad(num){
+	return num >= 10 ? num : '0' + num;
 }
 
 //Equaliser properties
 const resetEq = .5;
 var audioCtx = new AudioContext();
 var gainDb = -40.0;
-var bandSplit = [360,3600];
+var bandSplit = [360, 3600];
 var hBand = audioCtx.createBiquadFilter();
 hBand.type = "lowshelf";
 hBand.frequency.value = bandSplit[0];
@@ -141,14 +141,20 @@ lGain.gain.value = parseFloat($low.value);
 mGain.gain.value = parseFloat($mid.value);
 hGain.gain.value = parseFloat($high.value);
 
-function changeGain($elem) {
+function changeGain($elem){
 	$elem = $elem.target ? $elem.target : $elem;
 	var value = parseFloat($elem.value);
 
 	switch($elem.id){
-		case 'low': lGain.gain.value = value; break;
-		case 'mid': mGain.gain.value = value; break;
-		case 'high': hGain.gain.value = value; break;
+		case 'low':
+			lGain.gain.value = value;
+			break;
+		case 'mid':
+			mGain.gain.value = value;
+			break;
+		case 'high':
+			hGain.gain.value = value;
+			break;
 	}
 }
 
@@ -169,23 +175,23 @@ var $nxt = document.querySelector('.nxt');
 var $rwd = document.querySelector('.rwd');
 var $lapsed = document.querySelector('.lapsed');
 
-function initAudio($elem) {
+function initAudio($elem){
 	song.pause();
 
 	$title.textContent = $elem.children[2].textContent;
 	$artist.textContent = $elem.children[0].textContent;
 
 	var url = ['library'];
-	if( $elem.children[0].textContent){
+	if($elem.children[0].textContent){
 		url.push($elem.children[0].textContent);
 	}
-	if( $elem.children[1].textContent){
+	if($elem.children[1].textContent){
 		url.push($elem.children[1].textContent);
 	}
 	url = url.join('/');
-	$cover.setAttribute('src', url +  `/cover.jpg`);
+	$cover.setAttribute('src', url + `/cover.jpg`);
 
-	song.src = url+  '/'+$elem.children[2].textContent+'.mp3';
+	song.src = url + '/' + $elem.children[2].textContent + '.mp3';
 	song.volume = $volume.value;
 
 	removeClass(getActiveTrack(), active);
@@ -198,7 +204,8 @@ $play.onclick = function(){
 	}
 	play();
 };
-function play() {
+
+function play(){
 	song.play()
 	.then(function(){
 		removeClass(getActiveTrack(), warning);
@@ -213,7 +220,7 @@ function play() {
 }
 
 function getActiveTrack(){
-	return document.querySelector('tbody .'+active);
+	return document.querySelector('tbody .' + active);
 }
 
 function getFirstTrack(){
@@ -227,7 +234,8 @@ function getLastTrack(){
 $pause.onclick = function(){
 	pause();
 };
-function pause() {
+
+function pause(){
 	song.pause();
 	$play.hidden = false;
 	$pause.hidden = true;
@@ -240,7 +248,7 @@ $stop.onclick = function(){
 
 $lapsed.onclick = function(){
 	countUp = !countUp;
-	if(countUp) {
+	if(countUp){
 		$lapsed.title = "Elapsed"
 	}else{
 		$lapsed.title = "Remaining"
@@ -250,15 +258,16 @@ $lapsed.onclick = function(){
 $nxt.onclick = function(){
 	next();
 };
+
 function next(hasEnded){
-	if(hasEnded) {
+	if(hasEnded){
 		if(repeat === repeatOff){
 			return
 		}
 	}
 
 	var $next = getActiveTrack();
-	if($next && $next.nextElementSibling) {
+	if($next && $next.nextElementSibling){
 		$next = $next.nextElementSibling;
 	}else{
 		$next = getFirstTrack();
@@ -274,7 +283,7 @@ $rwd.onclick = function(){
 
 $prv.onclick = function(){
 	var $prev = getActiveTrack();
-	if($prev && $prev.previousElementSibling) {
+	if($prev && $prev.previousElementSibling){
 		$prev = $prev.previousElementSibling;
 	}else{
 		$prev = getLastTrack();
@@ -324,6 +333,7 @@ function removeClass($elm, clss){
 		$elm.classList.remove(clss);
 	}
 }
+
 function addClass($elm, clss){
 	if($elm){
 		$elm.classList.add(clss);
@@ -333,11 +343,11 @@ function addClass($elm, clss){
 //left/right panning
 var $panCtrl = document.querySelector('.panCtrl');
 var $panVal = document.querySelector('.panVal');
-$panCtrl.oninput = function() {
+$panCtrl.oninput = function(){
 	panNde.pan.value = $panCtrl.value;
 	$panVal.innerHTML = $panCtrl.value;
 };
-$panCtrl.ondblclick = function() {
+$panCtrl.ondblclick = function(){
 	panNde.pan.value = 0;
 	$panVal.innerHTML = 0;
 	$panCtrl.value = 0;
@@ -345,7 +355,7 @@ $panCtrl.ondblclick = function() {
 
 $mute.onclick = function(){
 	song.muted = !song.muted;
-	if($mute.classList.contains(active)) {
+	if($mute.classList.contains(active)){
 		removeClass($mute, active);
 	}else{
 		addClass($mute, active);
@@ -362,14 +372,15 @@ $volume.ondblclick = function(){
 
 $volume.oninput = function(){
 	song.volume = $volume.value;
-	if(volZeroPause) {
-		if(song.volume <= 0) {
+	if(volZeroPause){
+		if(song.volume <= 0){
 			pause();
-		} else if(song.paused) {
+		}else if(song.paused){
 			play();
 		}
 	}
 };
+
 function volume(value){
 	song.volume = value;
 	$volume.value = value;
@@ -400,7 +411,7 @@ $high.ondblclick = reset;
 
 document.querySelector('.shuffle').onclick = function(){
 	var ul = document.querySelector('tbody'), i = ul.children.length;
-	for (; i >= 0; i--) {
+	for(; i >= 0; i--){
 		ul.appendChild(ul.children[Math.random() * i | 0]);
 	}
 };
