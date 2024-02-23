@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/speedyhoon/cnst/hdr"
+	"github.com/speedyhoon/cnst/mime"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -18,7 +20,7 @@ func serveDir(dir, contentType string) {
 			//w.Header().Set("Expires", "0") //Expires now
 			//if dir != "/" {        //root index
 			//w.Header().Set("Content-Type", mimeType(dir)) //Expires now
-			w.Header().Set("Content-Type", contentType) //Expires now
+			w.Header().Set(hdr.ContentType, contentType) //Expires now
 			//w.Header().Set("Cache-Control", "public, max-age=31536000")
 			//w.Header().Set("Vary", "Accept-Encoding") //stackoverflow.com/questions/14540490/is-vary-accept-encoding-overkill
 			//}
@@ -45,15 +47,15 @@ func serveDir(dir, contentType string) {
 func main() {
 
 	//serveDir(dirBR)
-	serveDir("/css/", "text/css; charset=utf-8")
+	serveDir("/css/", mime.CSS)
 	//serveDir("/g/", "image/gif")
 	//serveDir("/html/", "text/html; charset=utf-8")
 	//serveDir("/e/", "image/jpeg")
-	serveDir("/js/", "text/javascript")
-	serveDir("/png/", "image/png")
+	serveDir("/js/", mime.JS)
+	serveDir("/png/", mime.PNG)
 	//serveDir("/v/", "image/svg+xml")
 	//serveDir("/w/", "image/webp")
-	serveDir("/", "text/html; charset=utf-8")
+	serveDir("/", mime.HTML)
 	//serveDir(dirGZIP, "text/javascript")
 
 	http.HandleFunc("/library2", library)
@@ -64,7 +66,7 @@ func main() {
 }
 
 func library(w http.ResponseWriter, r *http.Request) {
-	root := "library"
+	const root = "library"
 	var tracks []Track
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if info == nil {
