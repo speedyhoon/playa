@@ -1,4 +1,4 @@
-github.com/speedyhoon/cnst/hdr v0.0.0-20231101052807-adba6a7142e4 h1:zRpy9DkgI61ZVCXajfDC4B8oZthiWE1v8jXd8TGYDGE=
-github.com/speedyhoon/cnst/hdr v0.0.0-20231101052807-adba6a7142e4/go.mod h1:rTgoPnNHBO0bQy1yX2bVNquketxtVEdyS9xPsGto1S8=
-github.com/speedyhoon/cnst/mime v0.0.0-20231101052807-adba6a7142e4 h1:HrPEXRXOTmPsTN/T1mzASiuPQCXF4T7k/oF8Pkkb8xk=
-github.com/speedyhoon/cnst/mime v0.0.0-20231101052807-adba6a7142e4/go.mod h1:T4Nd24UVvB6OiRLeUub5wch1UnHMpLvm49l+J8KfenY=
+github.com/speedyhoon/cnst/hdr v0.0.0-20260908125427-a928416aace5 h1:94i1WwVKyAXvMwY5N8USAlb83KDQUOEF3nW9KoMFqmI=
+github.com/speedyhoon/cnst/hdr v0.0.0-20260908125427-a928416aace5/go.mod h1:Bl/19eiNcvuWHCpiYXIluip0lJlDCCDJBgojejkYxTA=
+github.com/speedyhoon/cnst/mime v0.0.0-20260908125427-a928416aace5 h1:BKX/Sdh6pOd1pYWokwOcwqiMRMdsvI35dbc6sa22o0s=
+github.com/speedyhoon/cnst/mime v0.0.0-20260908125427-a928416aace5/go.mod h1:yu/iOM2EvLiKiTv/sQ9cSfWQ/U1GCk5+RQ4GWv1RtbI=
